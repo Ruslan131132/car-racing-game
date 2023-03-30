@@ -86,6 +86,7 @@ diffBtn.forEach(item => {
 });
 
 startBtn.addEventListener('click', () => {
+    console.log(gameArea.offsetWidth)
     startMenu.classList.add('hide');
     gameArea.innerHTML = '';
     car.style.left = 'calc(50% - 25px)';
@@ -213,11 +214,11 @@ let swipeAction = function() {
         keys.ArrowRight = false
         keys.ArrowLeft = false
         settings.x = Math.ceil(posX1) - 25
-        if (settings.x > gameArea.offsetWidth - car.offsetWidth) {
-            settings.x = gameArea.offsetWidth - car.offsetWidth
+        if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
+            settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
         }
-        if (settings.x < 0) {
-            settings.x = 0
+        if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
+            settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
         }
         return
     // }
