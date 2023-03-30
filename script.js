@@ -21,6 +21,7 @@ let posInit = 0,
     isScroll = false;
 
 const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
+const lineStyles = ['forest_1', 'forest_2', 'forest_3'];
 
 car.classList.add('car');
 
@@ -92,13 +93,25 @@ startBtn.addEventListener('click', () => {
     screenGame.classList.add('screen-up')
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
-    for (let i = 0; i < getQuantityElements(80); i++) {
-        const line = document.createElement('div');
-        line.classList.add('line');
-        line.style.top = i * 80 + 'px';
-        line.y = i * 80;
-        gameArea.appendChild(line);
-    }
+    console.log(getQuantityElements(80));
+    // for (let i = 0; i < 3; i++) {
+    //     const line_elem = document.createElement('div');
+    //     line_elem.classList.add('line_elem');
+        for (let j = 0; j < 5; j++) {
+            const line_block = document.createElement('div');
+            line_block.classList.add('line_block');
+
+            // const line = document.createElement('div');
+            // line.classList.add('line');
+            //
+            line_block.style.top = (j-1) * 300 +'px';
+            line_block.y = (j - 1) * 300;
+
+            line_block.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] +'.png")'
+            gameArea.appendChild(line_block);
+        }
+        // gameArea.appendChild(line_elem);
+    // }
 
     for (let i = 0; i < getQuantityElements(80 * settings.traffic); i++) {
         const enemy = document.createElement('div');
@@ -316,12 +329,13 @@ function stopGame(event) {
 }
 
 function moveRoad() {
-    let lines = document.querySelectorAll('.line');
+    let lines = document.querySelectorAll('.line_block');
     lines.forEach(function (line) {
         line.y += settings.speed;
         line.style.top = line.y + 'px';
         if (line.y >= document.documentElement.clientHeight) {
-            line.y = -80;
+            line.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] +'.png")'
+            line.y = -490;
         }
     });
 }
