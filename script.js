@@ -88,7 +88,7 @@ startBtn.addEventListener('click', () => {
     startMenu.classList.add('hide');
     gameArea.innerHTML = '';
     car.style.left = 'calc(50% - 25px)';
-    car.style.bottom = '75px';
+    car.style.bottom = '170px';
     screenGame.classList.add('screen-up')
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
