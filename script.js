@@ -105,8 +105,8 @@ startBtn.addEventListener('click', () => {
             // const line = document.createElement('div');
             // line.classList.add('line');
             //
-            line_block.style.top = (j-1) * 300 +'px';
-            line_block.y = (j - 1) * 300;
+            line_block.style.bottom = (j) * 300 +'px';
+            line_block.y = ((j) * 300);
 
             line_block.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] +'.png")'
             gameArea.appendChild(line_block);
@@ -306,10 +306,10 @@ function playGame() {
         score.innerHTML = 'Score <br>' + settings.score;
         moveRoad();
         moveEnemy();
-        if (keys.ArrowLeft && settings.x > 0) {
+        if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
             settings.x -= settings.speed;
         }
-        if (keys.ArrowRight && settings.x < gameArea.offsetWidth - car.offsetWidth) {
+        if (keys.ArrowRight && settings.x < gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
             settings.x += settings.speed;
         }
         if (keys.ArrowUp && settings.y > 0) {
@@ -332,11 +332,11 @@ function stopGame(event) {
 function moveRoad() {
     let lines = document.querySelectorAll('.line_block');
     lines.forEach(function (line) {
-        line.y += settings.speed;
-        line.style.top = line.y + 'px';
-        if (line.y >= document.documentElement.clientHeight) {
+        line.y -= settings.speed;
+        line.style.bottom = line.y + 'px';
+        if (line.y < -300) {
             line.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] +'.png")'
-            line.y = -490;
+            line.y = 1190;
         }
     });
 }
