@@ -18,10 +18,16 @@ let posInit = 0,
     posY2 = 0,
     posFinal = 0,
     isSwipe = false,
-    isScroll = false;
+    isScroll = false
+    activeEnemiesLines = [];
 
 const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
 const lineStyles = ['forest_1', 'forest_2', 'forest_3'];
+const enemyPositions = [
+    (gameArea.offsetWidth * 100 / 590) + ((gameArea.offsetWidth * 60 / 590)) - 25 + 'px',
+    'calc(50% - 25px)',
+    (gameArea.offsetWidth * 360 / 590) + ((gameArea.offsetWidth * 65 / 590)) - 25  + 'px',
+];
 
 car.classList.add('car');
 
@@ -66,7 +72,7 @@ diffBtn.forEach(item => {
             });
             item.classList.add('active');
         } else if (item.classList.contains('medium')) {
-            settings.speed = 8;
+            settings.speed = 6;
             settings.traffic = 3;
             diffSelected.textContent = 'Выбрана сложность: средняя';
             diffBtn.forEach(item => {
@@ -86,7 +92,6 @@ diffBtn.forEach(item => {
 });
 
 startBtn.addEventListener('click', () => {
-    console.log(gameArea.offsetWidth)
     startMenu.classList.add('hide');
     gameArea.innerHTML = '';
     car.style.left = 'calc(50% - 25px)';
@@ -94,38 +99,49 @@ startBtn.addEventListener('click', () => {
     screenGame.classList.add('screen-up')
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
-    console.log(getQuantityElements(80));
-    // for (let i = 0; i < 3; i++) {
-    //     const line_elem = document.createElement('div');
-    //     line_elem.classList.add('line_elem');
-        for (let j = 0; j < 5; j++) {
-            const line_block = document.createElement('div');
-            line_block.classList.add('line_block');
+    // ГЕНЕРАЦИЯ ПОЛЯ
+    for (let j = 0; j < 5; j++) {
+        const line_block = document.createElement('div');
+        line_block.classList.add('line_block');
+        line_block.style.bottom = (j) * 298 + 'px';
+        line_block.y = ((j) * 298);
+        line_block.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] + '.png")'
+        gameArea.appendChild(line_block);
+    }
 
-            // const line = document.createElement('div');
-            // line.classList.add('line');
-            //
-            line_block.style.bottom = (j) * 300 +'px';
-            line_block.y = ((j) * 300);
+    for (let i = 0; i < Math.ceil(getQuantityElements(80 * settings.traffic)); i++) {//lines
+        let y = -300 * (i + 1);
 
-            line_block.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] +'.png")'
-            gameArea.appendChild(line_block);
+        let countCars = Math.floor(Math.random() * 2) + 1; // количество машин на одной полосе
+
+        const positions = JSON.parse(JSON.stringify(enemyPositions));
+
+        activeEnemiesLines[i] = []
+
+        for (let j = 0; j < countCars; j++) {//lines
+            let randPos = random(positions.length)
+            let carPos = positions[randPos];
+            positions.splice(randPos, 1)
+
+            const enemy = document.createElement('div');
+            enemy.classList.add('enemy');
+            enemy.dataset.line = i;
+            enemy.dataset.pos = carPos;
+            enemy.y = y
+
+            enemy.style.left = carPos
+
+            // Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
+
+            enemy.style.top = enemy.y + 'px';
+            enemy.style.background =
+                'rgba(0, 0, 0, 0) url(./image/' +
+                enemyStyles[random(enemyStyles.length)] +
+                '.png) center / cover no-repeat';
+            gameArea.append(enemy);
+            gameArea.appendChild(enemy);
+            activeEnemiesLines[i].push(enemy)
         }
-        // gameArea.appendChild(line_elem);
-    // }
-
-    for (let i = 0; i < getQuantityElements(80 * settings.traffic); i++) {
-        const enemy = document.createElement('div');
-        enemy.classList.add('enemy');
-        enemy.y = -100 * settings.traffic * (i + 1);
-        enemy.style.left = Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
-        enemy.style.top = enemy.y + 'px';
-        enemy.style.background =
-            'rgba(0, 0, 0, 0) url(./image/' +
-            enemyStyles[random(enemyStyles.length)] +
-            '.png) center / cover no-repeat';
-        gameArea.append(enemy);
-        gameArea.appendChild(enemy);
     }
     settings.score = 0;
     settings.start = true;
@@ -160,7 +176,7 @@ let swipeStart = function () {
     }
 }
 
-let swipeEnd = function() {
+let swipeEnd = function () {
     posFinal = posInit - posX1;
 
     isScroll = false;
@@ -198,7 +214,7 @@ let swipeEnd = function() {
 }
 
 
-let swipeAction = function() {
+let swipeAction = function () {
 
     let evt = getEvent();
 
@@ -211,16 +227,16 @@ let swipeAction = function() {
 
 
     // if (posX1 == settings.x || Math.abs(posX1 - settings.x) < 30) {
-        keys.ArrowRight = false
-        keys.ArrowLeft = false
-        settings.x = Math.ceil(posX1) - 25
-        if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-            settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
-        }
-        if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
-            settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
-        }
-        return
+    keys.ArrowRight = false
+    keys.ArrowLeft = false
+    settings.x = Math.ceil(posX1) - 25
+    if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
+        settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
+    }
+    if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
+        settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
+    }
+    return
     // }
 
 
@@ -266,31 +282,31 @@ let swipeAction = function() {
     //
     //
     //     console.log()
-        // // запрет ухода влево на первом слайде
-        // if (slideIndex === 0) {
-        //     if (posInit < posX1) {
-        //         setTransform(transform, 0);
-        //         return;
-        //     } else {
-        //         allowSwipe = true;
-        //     }
-        // }
-        //
-        // // запрет ухода вправо на последнем слайде
-        // if (slideIndex === --slides.length) {
-        //     if (posInit > posX1) {
-        //         setTransform(transform, lastTrf);
-        //         return;
-        //     } else {
-        //         allowSwipe = true;
-        //     }
-        // }
-        //
-        // // запрет протаскивания дальше одного слайда
-        // if (posInit > posX1 && transform < nextTrf || posInit < posX1 && transform > prevTrf) {
-        //     reachEdge();
-        //     return;
-        // }
+    // // запрет ухода влево на первом слайде
+    // if (slideIndex === 0) {
+    //     if (posInit < posX1) {
+    //         setTransform(transform, 0);
+    //         return;
+    //     } else {
+    //         allowSwipe = true;
+    //     }
+    // }
+    //
+    // // запрет ухода вправо на последнем слайде
+    // if (slideIndex === --slides.length) {
+    //     if (posInit > posX1) {
+    //         setTransform(transform, lastTrf);
+    //         return;
+    //     } else {
+    //         allowSwipe = true;
+    //     }
+    // }
+    //
+    // // запрет протаскивания дальше одного слайда
+    // if (posInit > posX1 && transform < nextTrf || posInit < posX1 && transform > prevTrf) {
+    //     reachEdge();
+    //     return;
+    // }
     // }
 
 }
@@ -334,48 +350,55 @@ function moveRoad() {
     lines.forEach(function (line) {
         line.y -= settings.speed;
         line.style.bottom = line.y + 'px';
-        if (line.y < -300) {
-            line.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] +'.png")'
-            line.y = 1190;
+        if (line.y <= -298) {
+            line.y = 1192 + line.y + 298;
+            line.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] + '.png")'
+
         }
     });
 }
 
 function moveEnemy() {
-    let enemies = document.querySelectorAll('.enemy');
-    enemies.forEach(function (item) {
-        let carRect = car.getBoundingClientRect();
-        let enemyRect = item.getBoundingClientRect();
-        if (
-            carRect.top <= enemyRect.bottom &&
-            carRect.right >= enemyRect.left &&
-            carRect.left <= enemyRect.right &&
-            carRect.bottom >= enemyRect.top
-        ) {
-            settings.start = false;
+    activeEnemiesLines.forEach(function (enemies, index) {
+        const positions = JSON.parse(JSON.stringify(enemyPositions));
+        enemies.forEach(function (item) {
+            let carRect = car.getBoundingClientRect();
+            let enemyRect = item.getBoundingClientRect();
+            if (
+                carRect.top <= enemyRect.bottom &&
+                carRect.right >= enemyRect.left &&
+                carRect.left <= enemyRect.right &&
+                carRect.bottom >= enemyRect.top
+            ) {
+                settings.start = false;
 
-            audio.pause();
-            audio.currentTime = 0;
-            audio.autoplay = false;
-            startMenu.classList.remove('hide');
-            settings.speed = 5;
-            settings.traffic = 3;
-            diffSelected.textContent = '';
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
-        }
-        item.y += settings.speed / 2;
-        item.style.top = item.y + 'px';
-        if (item.y >= document.documentElement.clientHeight) {
-            item.y = -80 * settings.traffic;
-            item.style.left = Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
-            item.style.background =
-                'rgba(0, 0, 0, 0) url(./image/' +
-                enemyStyles[random(enemyStyles.length)] +
-                '.png) center / cover no-repeat';
-        }
-    });
+                audio.pause();
+                audio.currentTime = 0;
+                audio.autoplay = false;
+                startMenu.classList.remove('hide');
+                settings.speed = 5;
+                settings.traffic = 3;
+                diffSelected.textContent = '';
+                diffBtn.forEach(item => {
+                    item.classList.remove('active');
+                });
+            }
+            item.y += settings.speed / 2;
+            item.style.top = item.y + 'px';
+            if (item.y >= document.documentElement.clientHeight) {
+                item.y = -600;
+                let randPos = random(positions.length)
+                let carPos = positions[randPos];
+                positions.splice(randPos, 1)
+                item.style.left = carPos
+                item.dataset.pos = carPos;
+                item.style.background =
+                    'rgba(0, 0, 0, 0) url(./image/' +
+                    enemyStyles[random(enemyStyles.length)] +
+                    '.png) center / cover no-repeat';
+            }
+        });
+    })
 }
 
 
