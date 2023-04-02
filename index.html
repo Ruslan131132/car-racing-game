@@ -1,38 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <title>Racing game</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="screen screen_start screen_show">
-      <div class="start__menu slideDown">
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="screen screen_start screen_show">
+    <div class="start__menu-logo">
+        <img class="logo" src="image/logo.svg">
+        <img class="sub-logo" src="image/DRIVER.svg">
+        <img class="poster" src="image/poster.svg">
+    </div>
+    <div class="start__menu slideDown">
         <div class="start__menu-container">
-          <div class="difficulty">
-            <p class="difficulty__title" style="margin-bottom: 10px">Выберите уровень сложности</p>
-            <button class="difficulty__button easy">Легкий</button>
-            <button class="difficulty__button medium active">Средний</button>
-            <button class="difficulty__button hard">Сложный</button>
-            <p class="difficulty-selected">Выбрана сложность: средняя</p>
-          </div>
+            <div class="difficulty">
+                <img class="difficulty__button offroad" src="image/mode/offroad.png">
+                <img class="difficulty__button gravity active" src="image/mode/gravity.png">
+                <img class="difficulty__button comfort" src="image/mode/comfort.png">
 
-          <button class="game__start">Начать игру</button>
+
+                <!--            <button class="difficulty__button easy">Легкий</button>-->
+                <!--            <button class="difficulty__button medium active">Средний</button>-->
+                <!--            <button class="difficulty__button hard">Сложный</button>-->
+                <!--            <p class="difficulty-selected">Выбрана сложность: средняя</p>-->
+            </div>
         </div>
-      </div>
     </div>
-    <div class="screen screen_game">
-      <div class="score_container hide">
-        <div class="score_inner">
-          <div class="score"></div>
-        </div>
-      </div>
-      <div class="game">
+</div>
+<div class="screen screen_game">
+    <div class="score_container hide"></div>
+    <div class="game">
         <div class="gamearea"></div>
-      </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+</div>
+<div class="screen screen_result screen_hide">
+    <div class="start__menu-logo">
+        <img class="logo" src="image/logo.svg">
+        <img class="sub-logo" src="image/DRIVER.svg">
+    </div>
+    <div class="points-block">
+        <img class="points-background" src="image/points.svg">
+        <span class="points-value">1300</span>
+        <button class="play_again">
+<!--            <img src="image/icons/again.svg">-->
+        </button>
+    </div>
+    <div class="media-container">
+        <button class="leader-button">
+            <img class="icon" src="image/icons/leader.svg">
+            <img class="text" src="image/icons/leader-table-text.svg">
+        </button>
+        <button class="change-mode-button" >
+            <img class="icon" src="image/icons/wheel.svg">
+            <img class="text" src="image/icons/change-mode-text.svg">
+        </button>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
 </html>

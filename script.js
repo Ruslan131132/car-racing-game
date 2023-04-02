@@ -1,13 +1,13 @@
-const score = document.querySelector('.score'),
-    startBtn = document.querySelector('.game__start'),
+const score = document.querySelector('.score_container'),
     gameArea = document.querySelector('.gamearea'),
     car = document.createElement('div'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
-    diffSelected = document.querySelector('.difficulty-selected'),
+    againBtn = document.querySelector('.play_again'),
     screens = document.querySelectorAll('.screen'),
     screenGame = document.querySelector('.screen_game'),
     screenStart = document.querySelector('.screen_start'),
-    startMenu = document.querySelector('.start__menu');
+    screenResult = document.querySelector('.screen_result'),
+    pointsValue = document.querySelector('.points-value');
 
 let allowSwipe = true;
 
@@ -19,14 +19,44 @@ let posInit = 0,
     posFinal = 0,
     isSwipe = false,
     isScroll = false
-    activeEnemiesLines = [];
+activeEnemiesLines = [];
 
-const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
-const lineStyles = ['forest_1', 'forest_2', 'forest_3'];
+// const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
+const enemyStyles = [
+    {
+        name: 'enemy1',
+        width: '67px',
+        height: '223px',
+        // padding: '0 10px 10px 14px',
+        // margin: '0 0 -10px -12px',
+        // backgroundSize: '80px 233px'
+        padding: '0',
+        margin: '0',
+        backgroundSize: 'cover'
+    },
+    {
+        name: 'enemy2',
+        width: '56px',
+        height: '100px',
+        padding: '0',
+        margin: '0',
+        backgroundSize: 'cover'
+    },
+    {
+        name: 'enemy3',
+        width: '54px',
+        height: '107px',
+        padding: '0',
+        margin: '0',
+        backgroundSize: 'cover'
+    },
+];
+
+const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyPositions = [
     (gameArea.offsetWidth * 100 / 590) + ((gameArea.offsetWidth * 60 / 590)) - 25 + 'px',
     'calc(50% - 25px)',
-    (gameArea.offsetWidth * 360 / 590) + ((gameArea.offsetWidth * 65 / 590)) - 25  + 'px',
+    (gameArea.offsetWidth * 360 / 590) + ((gameArea.offsetWidth * 65 / 590)) - 25 + 'px',
 ];
 
 car.classList.add('car');
@@ -51,6 +81,7 @@ const settings = {
     score: 0,
     speed: 6,
     traffic: 3,
+    mode: 'gravity'
 };
 
 function getQuantityElements(heightElement) {
@@ -63,54 +94,45 @@ function random(num) {
 
 diffBtn.forEach(item => {
     item.addEventListener('click', () => {
-        if (item.classList.contains('easy')) {
-            settings.speed = 5;
-            settings.traffic = 3.5;
-            diffSelected.textContent = 'Выбрана сложность: легкая';
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
-            item.classList.add('active');
-        } else if (item.classList.contains('medium')) {
-            settings.speed = 6;
-            settings.traffic = 3;
-            diffSelected.textContent = 'Выбрана сложность: средняя';
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
-            item.classList.add('active');
-        } else if (item.classList.contains('hard')) {
-            settings.speed = 10;
-            settings.traffic = 2.5;
-            diffSelected.textContent = 'Выбрана сложность: сложная';
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
-            item.classList.add('active');
+        if (item.classList.contains('offroad')) {
+            settings.mode = 'gravity'
+            generateGame()
+        } else if (item.classList.contains('gravity')) {
+            settings.mode = 'gravity'
+            generateGame()
+        } else if (item.classList.contains('comfort')) {
+            settings.mode = 'comfort'
+            generateGame()
         }
     });
 });
 
-startBtn.addEventListener('click', () => {
-    startMenu.classList.add('hide');
+againBtn.addEventListener('click', (event) => {
+   generateGame()
+});
+
+function generateGame() {
     gameArea.innerHTML = '';
     car.style.left = 'calc(50% - 25px)';
     car.style.bottom = '170px';
-    screenGame.classList.add('screen-up')
+    screenResult.classList.add('screen_hide');
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
+    screenGame.classList.add('screen-up')
+
+
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
         const line_block = document.createElement('div');
         line_block.classList.add('line_block');
         line_block.style.bottom = (j) * 298 + 'px';
         line_block.y = ((j) * 298);
-        line_block.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] + '.png")'
+        line_block.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
         gameArea.appendChild(line_block);
     }
 
     for (let i = 0; i < Math.ceil(getQuantityElements(80 * settings.traffic)); i++) {//lines
-        let y = -300 * (i + 1);
+        let y = -500 * (i + 1);
 
         let countCars = Math.floor(Math.random() * 2) + 1; // количество машин на одной полосе
 
@@ -133,11 +155,15 @@ startBtn.addEventListener('click', () => {
 
             // Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
 
+            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
             enemy.style.top = enemy.y + 'px';
             enemy.style.background =
                 'rgba(0, 0, 0, 0) url(./image/' +
-                enemyStyles[random(enemyStyles.length)] +
-                '.png) center / cover no-repeat';
+                chosen_enemy.name + '.svg) center / ' + chosen_enemy.backgroundSize + ' no-repeat';
+            enemy.style.width = chosen_enemy.width
+            enemy.style.height = chosen_enemy.height
+            enemy.style.padding = chosen_enemy.padding
+            enemy.style.margin = chosen_enemy.margin
             gameArea.append(enemy);
             gameArea.appendChild(enemy);
             activeEnemiesLines[i].push(enemy)
@@ -151,7 +177,7 @@ startBtn.addEventListener('click', () => {
     audio.autoplay = true;
     audio.play();
     requestAnimationFrame(playGame);
-});
+}
 
 
 // sliderTrack.addEventListener('transitionend', () => allowSwipe = true);
@@ -319,7 +345,7 @@ function startGame(event) {
 function playGame() {
     if (settings.start) {
         settings.score += settings.speed;
-        score.innerHTML = 'Score <br>' + settings.score;
+        score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
         if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
@@ -352,7 +378,7 @@ function moveRoad() {
         line.style.bottom = line.y + 'px';
         if (line.y <= -298) {
             line.y = 1192 + line.y + 298;
-            line.style.backgroundImage = 'url("image/forest/' + lineStyles[random(lineStyles.length)] + '.png")'
+            line.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
 
         }
     });
@@ -375,27 +401,32 @@ function moveEnemy() {
                 audio.pause();
                 audio.currentTime = 0;
                 audio.autoplay = false;
-                startMenu.classList.remove('hide');
-                settings.speed = 5;
-                settings.traffic = 3;
-                diffSelected.textContent = '';
-                diffBtn.forEach(item => {
-                    item.classList.remove('active');
-                });
+                pointsValue.innerHTML = settings.score;
+                screenResult.classList.remove('screen_hide');
+                screenStart.classList.add('screen_hide');
+                screenGame.classList.add('screen_hide');
+                againBtn.classList.add(settings.mode);
+                screenGame.classList.remove('screen-up')
+                screenGame.style.marginTop = '0'
             }
             item.y += settings.speed / 2;
             item.style.top = item.y + 'px';
             if (item.y >= document.documentElement.clientHeight) {
-                item.y = -600;
+                item.y = -1000;
                 let randPos = random(positions.length)
                 let carPos = positions[randPos];
                 positions.splice(randPos, 1)
                 item.style.left = carPos
                 item.dataset.pos = carPos;
+                let chosen_enemy = enemyStyles[random(enemyStyles.length)]
                 item.style.background =
                     'rgba(0, 0, 0, 0) url(./image/' +
-                    enemyStyles[random(enemyStyles.length)] +
-                    '.png) center / cover no-repeat';
+                    chosen_enemy.name +
+                    '.svg) center / ' + chosen_enemy.backgroundSize + ' no-repeat';
+                item.style.width = chosen_enemy.width
+                item.style.height = chosen_enemy.height
+                item.style.padding = chosen_enemy.padding
+                item.style.margin = chosen_enemy.margin
             }
         });
     })

@@ -104,11 +104,20 @@ section {
 
 body {
     line-height: 1;
+    background: radial-gradient(50% 50% at 50% 50%, #265D96 0%, #002954 100%);
 }
 
 ol,
 ul {
     list-style: none;
+}
+
+button {
+    background: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+    padding: 26px;
 }
 
 blockquote,
@@ -131,6 +140,7 @@ table {
 
 body {
     overflow: hidden;
+    font-family: 'PT Sans';
 }
 
 :root {
@@ -138,6 +148,8 @@ body {
     --color-dark: #17181c;
     --color-white: #f7f7f7;
     --color-surf: #08fdd8;
+    --color-blue: #234D9F
+;
 }
 
 .hide {
@@ -146,8 +158,8 @@ body {
 
 .car,
 .enemy {
-    width: 50px;
-    height: 100px;
+    width: 60px;
+    height: 120px;
     background-image: url(image/player.svg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -171,7 +183,7 @@ body {
     left: 0;
     right: 0;
     height: 300px;
-    background-image: url("image/forest/forest_1.png");
+    background-image: url("image/gravity/img_1.png");
     /*width: 100%;*/
     background-size: 100% 300px;
     background-repeat: no-repeat;
@@ -187,17 +199,17 @@ body {
 }
 
 .start__menu {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 450px;
-    background: var(--color-white);
-    text-align: center;
-    border: 2px solid var(--color-dark);
-    border-radius: 10px;
-    overflow: hidden;
-    z-index: 201;
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -50%);*/
+    /*width: 450px;*/
+    /*background: var(--color-white);*/
+    /*text-align: center;*/
+    /*border: 2px solid var(--color-dark);*/
+    /*border-radius: 10px;*/
+    /*overflow: hidden;*/
+    /*z-index: 201;*/
 }
 
 .difficulty {
@@ -227,29 +239,31 @@ body {
 
 .difficulty__button {
     cursor: pointer;
-    min-width: 100px;
-    padding: 0.5rem;
-    margin: 0 5px 15px;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #fff;
-    font-family: inherit;
-    background-color: var(--color-dark);
-    outline: none;
-    border: 1px solid var(--color-dark);
-    border-radius: 4px;
-    transition: all 0.2s linear;
+    width: 100%;
+    margin-bottom: 40px;
+    /*min-width: 100px;*/
+    /*padding: 0.5rem;*/
+    /*margin: 0 5px 15px;*/
+    /*font-size: 1rem;*/
+    /*font-weight: 500;*/
+    /*color: #fff;*/
+    /*font-family: inherit;*/
+    /*background-color: var(--color-dark);*/
+    /*outline: none;*/
+    /*border: 1px solid var(--color-dark);*/
+    /*border-radius: 4px;*/
+    /*transition: all 0.2s linear;*/
 }
 
 .difficulty__button.active {
-    color: var(--color-dark);
-    background-color: #fff;
+    /*color: var(--color-dark);*/
+    /*background-color: #fff;*/
 }
 
 .difficulty__button:hover {
-    color: var(--color-dark);
-    background-color: #fff;
-    border-color: #999;
+    /*color: var(--color-dark);*/
+    /*background-color: #fff;*/
+    /*border-color: #999;*/
 }
 
 .game__start {
@@ -282,14 +296,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 60px;
-    background: var(--color-dark);
+    width: fit-content;
+    background: var(--color-blue);
     z-index: 200;
     font-size: 1.5rem;
-    color: var(--color-surf);
+    color: #fff;
     text-align: center;
-    font-weight: 500;
+    font-weight: 700;
+    padding: 11px 20px;
 }
 
 .score_inner {
@@ -308,14 +322,23 @@ body {
     height: 100vh;
     width: 100vw;
     transition: margin 0.5s ease-in;
+    max-width: 590px;
 }
 
 .screen-up {
     margin-top: -100vh;
 }
 
+.screen-down {
+    margin-top: 0;
+}
+
+
 .screen-up  .score_container {
     position: fixed;
+    left: 50%;
+    top: 44px;
+    transform: translate(-50%, -50%);
 }
 
 .screen_show {
@@ -326,14 +349,182 @@ body {
     display: none;
 }
 
-@media screen and (max-width: 768px) {
-    .start__menu.slideDown {
-        width: 70%;
+.start__menu-logo {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 80px 70px 0 70px;
+    gap: 15px;
+}
+
+.start__menu-logo .logo {
+    max-width: 455px;
+}
+
+.start__menu-logo .sub-logo {
+    max-width: 130px;
+}
+
+.start__menu-logo .poster {
+    margin-top: -30px;
+}
+
+.start__menu-container {
+    padding: 0 50px 0 70px;
+}
+
+.screen_result .points-block {
+    margin-top: 60px;
+    position: relative;
+}
+
+.screen_result .points-background {
+    width: calc(100% * 400 / 590)
+}
+
+.screen_result .points-value {
+    position: absolute;
+    left: 9%;
+    top: 45%;
+    font-weight: 600;
+    color: #074989;
+    font-style: italic;
+    font-size: 50px;
+}
+
+.play_again {
+    position: absolute;
+    margin-left: 30px;
+    top: 8%;
+    background: url('image/icons/again.svg') no-repeat center;
+    height: 100px;
+    width: 100px;
+}
+
+.media-container {
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 65px;
+    gap: 100px;
+}
+
+.media-container button {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+
+@media screen and (max-width: 550px) {
+    .car,
+    .enemy {
+        width: 50px;
+        height: 100px;
+    }
+    .start__menu-logo {
+        padding: 50px 30px 0 30px;
+        gap: 7px;
+    }
+    .start__menu-logo .sub-logo {
+        height: 30px;
+        width: 90px;
+    }
+
+    .start__menu-container {
+        padding: 0 10px 0 30px;
     }
 
     .difficulty__button {
-        min-width: 140px;
+        margin-bottom: 25px;
     }
+
+    .media-container img.icon {
+        width: 60px;
+    }
+
+    .media-container img.text {
+        height: 60px;
+    }
+
+}
+
+@media screen and (max-width: 500px) {
+    .media-container {
+        gap: 80px;
+    }
+
+    .media-container img.icon {
+        width: 50px;
+    }
+
+    .media-container img.text {
+        height: 50px;
+    }
+
+    .screen_result .points-value {
+        font-size: 45px;
+    }
+    .play_again {
+        background: url('image/icons/again.svg') no-repeat center;
+        background-size: 35px 35px;
+        height: 80px;
+        width: 80px;
+    }
+    .play_again {
+        top: 12%;
+    }
+}
+
+
+@media screen and (max-width: 450px) {
+    .screen_result .points-value {
+        font-size: 40px;
+        left: 8%;
+    }
+
+    .media-container img.icon {
+        width: 40px;
+    }
+
+    .media-container img.text {
+        height: 40px;
+    }
+
+}
+
+@media screen and (max-width: 400px) {
+    .screen_result .points-value {
+        font-size: 35px;
+    }
+
+    .media-container img.icon {
+        width: 35px;
+    }
+
+    .media-container img.text {
+        height: 35px;
+    }
+
+    .media-container button {
+        gap: 15px;
+    }
+
+}
+
+
+@media screen and (max-width: 768px) {
+    /*.start__menu.slideDown {*/
+    /*    width: 70%;*/
+    /*}*/
+
+    /*.difficulty__button {*/
+    /*    min-width: 140px;*/
+    /*}*/
 
     .gamearea {
         width: 100%;
