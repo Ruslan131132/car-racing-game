@@ -37,16 +37,24 @@ const enemyStyles = [
     },
     {
         name: 'enemy2',
-        width: '56px',
-        height: '100px',
+        width: '46.87px',
+        height: '98px',
         padding: '0',
         margin: '0',
         backgroundSize: 'cover'
     },
     {
         name: 'enemy3',
-        width: '54px',
-        height: '107px',
+        width: '64.97px',
+        height: '125px',
+        padding: '0',
+        margin: '0',
+        backgroundSize: 'cover'
+    },
+    {
+        name: 'enemy4',
+        width: '51px',
+        height: '96.98px',
         padding: '0',
         margin: '0',
         backgroundSize: 'cover'
@@ -362,6 +370,15 @@ function startGame(event) {
 function playGame() {
     if (settings.start) {
         settings.score += settings.speed;
+        if (settings.score == 10000) {
+            console.log('+1')
+        }
+
+        let checkScore = settings.score % 5000
+
+        if (settings.speed <= 12 checkScore > 4996 || (checkScore >= 0 && checkScore < 4)) {
+            settings.speed += 1
+        }
         score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
