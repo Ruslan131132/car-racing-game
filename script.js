@@ -59,6 +59,8 @@ const enemyPositions = [
     'calc(50% - 25px)',
     (gameArea.offsetWidth * 360 / 590) + ((gameArea.offsetWidth * 65 / 590)) - 25 + 'px',
 ];
+const enemyOffsets = [-20, -10, 10, 20];
+const lineAvailablePositions = [];
 
 car.classList.add('car');
 
@@ -141,25 +143,30 @@ function generateGame() {
         gameArea.appendChild(line_block);
     }
 
-    for (let i = 0; i < Math.ceil(getQuantityElements(80 * settings.traffic)); i++) {//lines
+    for (let i = 0; i < 4; i++) {//lines
         let y = -500 * (i + 1);
 
         let countCars = Math.floor(Math.random() * 2) + 1; // количество машин на одной полосе
 
-        const positions = JSON.parse(JSON.stringify(enemyPositions));
+        let enemyOffsetsArray = JSON.parse(JSON.stringify(enemyOffsets));
 
         activeEnemiesLines[i] = []
+        lineAvailablePositions[i] = [...enemyPositions];
 
         for (let j = 0; j < countCars; j++) {//lines
-            let randPos = random(positions.length)
-            let carPos = positions[randPos];
-            positions.splice(randPos, 1)
+            let randPos = random(lineAvailablePositions[i].length)
+            let carPos = lineAvailablePositions[i][randPos];
+            let randOffset = random(enemyOffsetsArray.length)
+            let enemyOffset = enemyOffsetsArray[randOffset]
+            lineAvailablePositions[i].splice(randPos, 1)
+            enemyOffsetsArray.splice(randOffset, 1)
 
             const enemy = document.createElement('div');
             enemy.classList.add('enemy');
             enemy.dataset.line = i;
             enemy.dataset.pos = carPos;
-            enemy.y = y
+            enemy.dataset.offset = enemyOffset;
+            enemy.y = y + enemyOffset
 
             enemy.style.left = carPos
 
@@ -396,7 +403,6 @@ function moveRoad() {
 
 function moveEnemy() {
     activeEnemiesLines.forEach(function (enemies, index) {
-        const positions = JSON.parse(JSON.stringify(enemyPositions));
         enemies.forEach(function (item) {
             let carRect = car.getBoundingClientRect();
             let enemyRect = item.getBoundingClientRect();
@@ -423,10 +429,9 @@ function moveEnemy() {
             item.style.top = item.y + 'px';
             if (item.y >= document.documentElement.clientHeight) {
                 item.y = -2000 + document.documentElement.clientHeight;
-                let randPos = random(positions.length)
-                let carPos = positions[randPos];
-                positions.splice(randPos, 1)
+                let carPos = lineAvailablePositions[index][0];
                 item.style.left = carPos
+                lineAvailablePositions[index] = [item.dataset.pos]
                 item.dataset.pos = carPos;
                 let chosen_enemy = enemyStyles[random(enemyStyles.length)]
                 item.style.background =
