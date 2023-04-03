@@ -367,6 +367,7 @@ body {
 
 .start__menu-logo .poster {
     margin-top: -30px;
+    display: block;
 }
 
 .start__menu-container {
