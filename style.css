@@ -214,7 +214,6 @@ body {
 
 .difficulty {
     padding: 20px 0;
-    border-bottom: 2px solid var(--color-dark);
 }
 
 .difficulty p {
@@ -496,6 +495,22 @@ body {
         height: 40px;
     }
 
+    .difficulty__button {
+        margin: 0 auto 25px;
+        width: 85%;
+        display: block;
+    }
+
+    .start__menu-logo {
+        padding-top: 30px;
+    }
+
+    .start__menu-logo .poster {
+        margin-top: -45px;
+        display: block;
+        height: 140px;
+    }
+
 }
 
 @media screen and (max-width: 400px) {
@@ -516,13 +531,11 @@ body {
     }
 
     .difficulty__button {
-        margin: 0 auto 25px;
         width: 80%;
-        display: block;
     }
 
-    .start__menu-logo {
-        padding-top: 30px;
+    .start__menu-logo .poster {
+        height: 110px;
     }
 
 }
