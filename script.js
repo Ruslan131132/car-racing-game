@@ -3,6 +3,7 @@ const score = document.querySelector('.score_container'),
     car = document.createElement('div'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
     againBtn = document.querySelector('.play_again'),
+    backToMenuBtn = document.querySelector('.change-mode-button'),
     screens = document.querySelectorAll('.screen'),
     screenGame = document.querySelector('.screen_game'),
     screenStart = document.querySelector('.screen_start'),
@@ -109,6 +110,15 @@ diffBtn.forEach(item => {
 
 againBtn.addEventListener('click', (event) => {
    generateGame()
+});
+
+backToMenuBtn.addEventListener('click', (event) => {
+    screenResult.classList.add('screen_hide');
+    screenGame.classList.add('screen_hide')
+    screenStart.classList.remove('screen_hide');
+    screenStart.classList.add('screen_show');
+    screenGame.classList.remove('screen-up')
+    screenGame.style.marginTop = null
 });
 
 function generateGame() {
@@ -412,7 +422,7 @@ function moveEnemy() {
             item.y += settings.speed / 2;
             item.style.top = item.y + 'px';
             if (item.y >= document.documentElement.clientHeight) {
-                item.y = -1000;
+                item.y = activeEnemiesLines[activeEnemiesLines.length - 1][0].y - 500;
                 let randPos = random(positions.length)
                 let carPos = positions[randPos];
                 positions.splice(randPos, 1)
