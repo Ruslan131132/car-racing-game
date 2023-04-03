@@ -401,10 +401,10 @@ function moveEnemy() {
             let carRect = car.getBoundingClientRect();
             let enemyRect = item.getBoundingClientRect();
             if (
-                carRect.top <= enemyRect.bottom &&
-                carRect.right >= enemyRect.left &&
-                carRect.left <= enemyRect.right &&
-                carRect.bottom >= enemyRect.top
+                carRect.top <= enemyRect.bottom - 2 &&
+                carRect.right >= enemyRect.left - 2 &&
+                carRect.left <= enemyRect.right - 2 &&
+                carRect.bottom >= enemyRect.top - 2
             ) {
                 settings.start = false;
 
@@ -422,7 +422,7 @@ function moveEnemy() {
             item.y += settings.speed / 2;
             item.style.top = item.y + 'px';
             if (item.y >= document.documentElement.clientHeight) {
-                item.y = activeEnemiesLines[activeEnemiesLines.length - 1][0].y - 500;
+                item.y = -2000 + document.documentElement.clientHeight;
                 let randPos = random(positions.length)
                 let carPos = positions[randPos];
                 positions.splice(randPos, 1)
