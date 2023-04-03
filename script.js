@@ -370,10 +370,6 @@ function startGame(event) {
 function playGame() {
     if (settings.start) {
         settings.score += settings.speed;
-        if (settings.score == 10000) {
-            console.log('+1')
-        }
-
         let checkScore = settings.score % 5000
 
         if (settings.speed <= 12 checkScore > 4996 || (checkScore >= 0 && checkScore < 4)) {
