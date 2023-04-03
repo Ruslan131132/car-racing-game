@@ -27,9 +27,9 @@ let enemyStyles = [];
 
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyPositions = [
-    (gameArea.offsetWidth * 100 / 590) + ((gameArea.offsetWidth * 60 / 590)) - 25 + 'px',
-    'calc(50% - 25px)',
-    (gameArea.offsetWidth * 360 / 590) + ((gameArea.offsetWidth * 65 / 590)) - 25 + 'px',
+    (gameArea.offsetWidth * 165 / 590) + 'px',
+    gameArea.offsetWidth * 0.5 + 'px',
+    (gameArea.offsetWidth * 425 / 590) + 'px',
 ];
 const enemyOffsets = [-20, -10, 10, 20];
 const lineAvailablePositions = [];
@@ -77,12 +77,12 @@ diffBtn.forEach(item => {
             enemyStyles = [
                 {
                     name: 'enemy1',
-                    width: gameArea.offsetWidth * 133 / 590 + 'px',
+                    width: document.documentElement.clientWidth * 133 / 590 + 'px',
                     height: document.documentElement.clientHeight * 49 / 1200 + 'px',
                 },
                 {
                     name: 'enemy2',
-                    width: gameArea.offsetWidth * 111 / 590 + 'px',
+                    width: document.documentElement.clientWidth * 111 / 590 + 'px',
                     height: document.documentElement.clientHeight * 50 / 1200 + 'px',
                 }
             ];
@@ -123,12 +123,12 @@ diffBtn.forEach(item => {
             enemyStyles = [
                 {
                     name: 'enemy1',
-                    width: gameArea.offsetWidth * 89 / 590 + 'px',
+                    width: document.documentElement.clientWidth * 89 / 590 + 'px',
                     height: document.documentElement.clientHeight * 49 / 1200 + 'px',
                 },
                 {
                     name: 'enemy2',
-                    width: gameArea.offsetWidth * 30 / 590 + 'px',
+                    width: document.documentElement.clientWidth * 30 / 590 + 'px',
                     height: document.documentElement.clientHeight * 35 / 1200 + 'px',
                 }
             ];
@@ -192,15 +192,14 @@ function generateGame() {
             enemy.dataset.line = i;
             enemy.dataset.pos = carPos;
             enemy.dataset.offset = enemyOffset;
-            enemy.y = y + enemyOffset
-            enemy.style.left = carPos
-
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
             enemy.style.top = enemy.y + 'px';
             enemy.style.background =
                 'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
             enemy.style.width = chosen_enemy.width
             enemy.style.height = chosen_enemy.height
+            enemy.y = y + enemyOffset
+            enemy.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
             gameArea.append(enemy);
             gameArea.appendChild(enemy);
             activeEnemiesLines[i].push(enemy)
@@ -453,10 +452,11 @@ function moveEnemy() {
             if (item.y >= document.documentElement.clientHeight) {
                 item.y = -2000 + document.documentElement.clientHeight;
                 let carPos = lineAvailablePositions[index][0];
-                item.style.left = carPos
+                let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+                item.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
                 lineAvailablePositions[index] = [item.dataset.pos]
                 item.dataset.pos = carPos;
-                let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+
                 item.style.background =
                     'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
                 item.style.width = chosen_enemy.width
