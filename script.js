@@ -430,6 +430,7 @@ function moveEnemy() {
                 audio.pause();
                 audio.currentTime = 0;
                 audio.autoplay = false;
+                settings.speed = 6
                 pointsValue.innerHTML = settings.score;
                 screenResult.classList.remove('screen_hide');
                 screenStart.classList.add('screen_hide');
