@@ -514,6 +514,16 @@ body {
         gap: 15px;
     }
 
+    .difficulty__button {
+        margin: 0 auto 25px;
+        width: 80%;
+        display: block;
+    }
+
+    .start__menu-logo {
+        padding-top: 30px;
+    }
+
 }
 
 
