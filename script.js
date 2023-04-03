@@ -23,43 +23,7 @@ let posInit = 0,
 activeEnemiesLines = [];
 
 // const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
-const enemyStyles = [
-    {
-        name: 'enemy1',
-        width: '67px',
-        height: '223px',
-        // padding: '0 10px 10px 14px',
-        // margin: '0 0 -10px -12px',
-        // backgroundSize: '80px 233px'
-        padding: '0',
-        margin: '0',
-        backgroundSize: 'cover'
-    },
-    {
-        name: 'enemy2',
-        width: '46.87px',
-        height: '98px',
-        padding: '0',
-        margin: '0',
-        backgroundSize: 'cover'
-    },
-    {
-        name: 'enemy3',
-        width: '64.97px',
-        height: '125px',
-        padding: '0',
-        margin: '0',
-        backgroundSize: 'cover'
-    },
-    {
-        name: 'enemy4',
-        width: '51px',
-        height: '96.98px',
-        padding: '0',
-        margin: '0',
-        backgroundSize: 'cover'
-    },
-];
+let enemyStyles = [];
 
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyPositions = [
@@ -95,6 +59,9 @@ const settings = {
     mode: 'gravity'
 };
 
+let speedSum = settings.speed
+let speedSumInc = 1
+
 function getQuantityElements(heightElement) {
     return document.documentElement.clientHeight / heightElement + 1;
 }
@@ -106,13 +73,65 @@ function random(num) {
 diffBtn.forEach(item => {
     item.addEventListener('click', () => {
         if (item.classList.contains('offroad')) {
-            settings.mode = 'gravity'
+            settings.mode = 'offroad'
+            enemyStyles = [
+                {
+                    name: 'enemy1',
+                    width: gameArea.offsetWidth * 133 / 590 + 'px',
+                    height: document.documentElement.clientHeight * 49 / 1200 + 'px',
+                },
+                {
+                    name: 'enemy2',
+                    width: gameArea.offsetWidth * 111 / 590 + 'px',
+                    height: document.documentElement.clientHeight * 50 / 1200 + 'px',
+                }
+            ];
+            speedSum = settings.speed;
+            speedSumInc = 1
             generateGame()
         } else if (item.classList.contains('gravity')) {
             settings.mode = 'gravity'
+            enemyStyles = [
+                {
+                    name: 'enemy1',
+                    width: '67px',
+                    height: '223px',
+                },
+                {
+                    name: 'enemy2',
+                    width: '46.87px',
+                    height: '98px',
+                },
+                {
+                    name: 'enemy3',
+                    width: '64.97px',
+                    height: '125px',
+                },
+                {
+                    name: 'enemy4',
+                    width: '51px',
+                    height: '96.98px',
+                },
+            ];
+            speedSum = settings.speed / 2;
+            speedSumInc = 0.5
             generateGame()
         } else if (item.classList.contains('comfort')) {
             settings.mode = 'comfort'
+            speedSum = settings.speed;
+            speedSumInc = 1
+            enemyStyles = [
+                {
+                    name: 'enemy1',
+                    width: gameArea.offsetWidth * 89 / 590 + 'px',
+                    height: document.documentElement.clientHeight * 49 / 1200 + 'px',
+                },
+                {
+                    name: 'enemy2',
+                    width: gameArea.offsetWidth * 30 / 590 + 'px',
+                    height: document.documentElement.clientHeight * 35 / 1200 + 'px',
+                }
+            ];
             generateGame()
         }
     });
@@ -139,7 +158,6 @@ function generateGame() {
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
     screenGame.classList.add('screen-up')
-
 
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
@@ -175,20 +193,14 @@ function generateGame() {
             enemy.dataset.pos = carPos;
             enemy.dataset.offset = enemyOffset;
             enemy.y = y + enemyOffset
-
             enemy.style.left = carPos
-
-            // Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
 
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
             enemy.style.top = enemy.y + 'px';
             enemy.style.background =
-                'rgba(0, 0, 0, 0) url(./image/' +
-                chosen_enemy.name + '.svg) center / ' + chosen_enemy.backgroundSize + ' no-repeat';
+                'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
             enemy.style.width = chosen_enemy.width
             enemy.style.height = chosen_enemy.height
-            enemy.style.padding = chosen_enemy.padding
-            enemy.style.margin = chosen_enemy.margin
             gameArea.append(enemy);
             gameArea.appendChild(enemy);
             activeEnemiesLines[i].push(enemy)
@@ -203,10 +215,6 @@ function generateGame() {
     audio.play();
     requestAnimationFrame(playGame);
 }
-
-
-// sliderTrack.addEventListener('transitionend', () => allowSwipe = true);
-
 
 let getEvent = function () {
     return (event.type.search('touch') !== -1) ? event.touches[0] : event;
@@ -374,6 +382,7 @@ function playGame() {
 
         if (settings.speed <= 12 && checkScore > 4996 || (checkScore >= 0 && checkScore < 4)) {
             settings.speed += 1
+            speedSum += speedSumInc
         }
         score.innerHTML = settings.score;
         moveRoad();
@@ -439,7 +448,7 @@ function moveEnemy() {
                 screenGame.classList.remove('screen-up')
                 screenGame.style.marginTop = '0'
             }
-            item.y += settings.speed / 2;
+            item.y += speedSum;
             item.style.top = item.y + 'px';
             if (item.y >= document.documentElement.clientHeight) {
                 item.y = -2000 + document.documentElement.clientHeight;
@@ -449,13 +458,9 @@ function moveEnemy() {
                 item.dataset.pos = carPos;
                 let chosen_enemy = enemyStyles[random(enemyStyles.length)]
                 item.style.background =
-                    'rgba(0, 0, 0, 0) url(./image/' +
-                    chosen_enemy.name +
-                    '.svg) center / ' + chosen_enemy.backgroundSize + ' no-repeat';
+                    'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
                 item.style.width = chosen_enemy.width
                 item.style.height = chosen_enemy.height
-                item.style.padding = chosen_enemy.padding
-                item.style.margin = chosen_enemy.margin
             }
         });
     })
