@@ -20,8 +20,9 @@ let posInit = 0,
     posY2 = 0,
     posFinal = 0,
     isSwipe = false,
-    isScroll = false
-activeEnemiesLines = [];
+    isScroll = false,
+    activeEnemiesLines = [],
+    splash;
 
 // const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
 let enemyStyles = [];
@@ -65,6 +66,8 @@ const settings = {
 
 let speedSum = settings.speed
 let speedSumInc = 1
+let puddleSpeedSum = settings.speed
+let puddleSpeedSumInc = 1
 
 function getQuantityElements(heightElement) {
     return document.documentElement.clientHeight / heightElement + 1;
@@ -197,18 +200,33 @@ function generateGame() {
             enemy.dataset.pos = carPos;
             enemy.dataset.offset = enemyOffset;
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-            enemy.style.top = enemy.y + 'px';
             enemy.style.background =
                 'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
             enemy.style.width = chosen_enemy.width
             enemy.style.height = chosen_enemy.height
             enemy.y = y + enemyOffset
+            enemy.style.top = enemy.y + 'px';
             enemy.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
             gameArea.append(enemy);
             gameArea.appendChild(enemy);
             activeEnemiesLines[i].push(enemy)
         }
     }
+    const puddle = document.createElement('div');
+    puddle.classList.add('enemy');
+    puddle.classList.add('puddle');
+    puddle.y = -2500;
+    puddle.style.top = '-2500px';
+    puddle.style.left = (gameArea.offsetWidth * 101 / 590) + 'px',
+    // gameArea.append(puddle);
+    gameArea.appendChild(puddle);
+    activeEnemiesLines[4] = [puddle];
+
+    splash = document.createElement('div');
+    splash.classList.add('splash');
+    splash.classList.add('hide');
+    gameArea.appendChild(splash);
+
     settings.score = 0;
     settings.start = true;
     gameArea.appendChild(car);
@@ -225,8 +243,6 @@ let getEvent = function () {
 
 let swipeStart = function () {
     let evt = getEvent();
-
-
     if (allowSwipe) {
 
         posInit = posX1 = evt.clientX;
@@ -333,6 +349,7 @@ function playGame() {
         if (settings.speed <= 12 && checkScore > 4996 || (checkScore >= 0 && checkScore < 4)) {
             settings.speed += 1
             speedSum += speedSumInc
+            puddleSpeedSum += puddleSpeedSumInc
         }
         score.innerHTML = settings.score;
         moveRoad();
@@ -375,6 +392,30 @@ function moveRoad() {
 
 function moveEnemy() {
     activeEnemiesLines.forEach(function (enemies, index) {
+        if (index == 4) {
+            let carRect = car.getBoundingClientRect();
+            let enemyRect = enemies[0].getBoundingClientRect();
+            if (carRect.top - enemyRect.bottom < 5 && carRect.top - enemyRect.bottom > - 5) {
+                splash.classList.remove('hide');
+                splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
+                splash.style.top = carRect.top + 'px';
+                setTimeout(() => {
+                    splash.classList.add('splash-after');
+                    splash.style.left = carRect.left - (gameArea.offsetWidth * 300 / 590 / 2) + 25 + 'px'
+                    splash.style.top = carRect.top + 'px';
+                    setTimeout(() => {
+                        splash.classList.remove('splash-after');
+                        splash.classList.add('hide');
+                    }, 100);
+                }, 100);
+            }
+            enemies[0].y += puddleSpeedSum;
+            enemies[0].style.top = enemies[0].y + 'px';
+            if (enemies[0].y >= document.documentElement.clientHeight) {
+                enemies[0].y = -2500;
+            }
+            return;
+        }
         enemies.forEach(function (item) {
             let carRect = car.getBoundingClientRect();
             let enemyRect = item.getBoundingClientRect();
@@ -396,10 +437,9 @@ function moveEnemy() {
                 settings.speed = 6
                 pointsValue.innerHTML = settings.score;
                 speedSum = settings.mode == 'gravity' ? settings.speed/2 : settings.speed
+                puddleSpeedSum = settings.speed;
                 const boom = document.createElement('div');
                 boom.classList.add('boom');
-
-
 
                 //ПОЗИЦИЯ ПО X
                 if (carRect.right - enemyRect.left < 15) {
@@ -421,6 +461,7 @@ function moveEnemy() {
 
 
                 setTimeout(() => {
+                    // gameArea.innerHTML = '';
                     boomAudio.pause();
                     boomAudio.currentTime = 0;
                     screenResult.classList.remove('screen_hide');

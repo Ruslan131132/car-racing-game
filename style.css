@@ -162,8 +162,7 @@ body {
     --color-dark: #17181c;
     --color-white: #f7f7f7;
     --color-surf: #08fdd8;
-    --color-blue: #234D9F
-;
+    --color-blue: #234D9F;
 }
 
 .hide {
@@ -181,6 +180,39 @@ body {
     position: absolute;
     left: 225px;
     bottom: 10px;
+    z-index: 6;
+}
+
+.puddle {
+    width: calc(100% * 390 / 590) !important;
+    height: 157px;
+    background-image: url(image/offroad/puddle.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    z-index: 5;
+}
+
+.splash {
+    width: calc(100% * 212 / 590);
+    height: 61px;
+    background-image: url(image/splash.svg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+    position: absolute;
+    z-index: 8;
+}
+
+.splash.splash-after {
+    width: calc(100% * 300 / 590);
+    height: 86px;
+    background-image: url(image/splash2.svg);
+}
+
+.splash.hide {
+    display: none;
 }
 
 .boom {
@@ -191,6 +223,7 @@ body {
     background-size: cover;
     background-position: center;
     position: absolute;
+    z-index: 7;
 }
 
 .gamearea {
@@ -357,7 +390,7 @@ body {
 }
 
 
-.screen-up  .score_container {
+.screen-up .score_container {
     position: fixed;
     left: 50%;
     top: 44px;
@@ -566,7 +599,7 @@ body {
     font-size: 9px;
 }
 
-.user-item:nth-child(-n + 3) .user-mode{
+.user-item:nth-child(-n + 3) .user-mode {
     background: #2E2563;
     color: #FFFFFF;
 }
@@ -598,7 +631,7 @@ body {
     transform: translate(0, -50%);
 }
 
-.user-item:nth-child(-n + 3) .user-name, .user-item:nth-child(-n + 3) .user-points{
+.user-item:nth-child(-n + 3) .user-name, .user-item:nth-child(-n + 3) .user-points {
     color: #074989;
 }
 
@@ -624,10 +657,12 @@ body {
         width: 50px;
         height: 100px;
     }
+
     .start__menu-logo {
         padding: 50px 30px 0 30px;
         gap: 7px;
     }
+
     .start__menu-logo .sub-logo {
         height: 30px;
         width: 90px;
@@ -682,12 +717,14 @@ body {
     .screen_result .points-value {
         font-size: 45px;
     }
+
     .play_again {
         background: url('image/icons/again.svg') no-repeat center;
         background-size: 35px 35px;
         height: 80px;
         width: 80px;
     }
+
     .play_again {
         top: 12%;
     }
@@ -777,11 +814,9 @@ body {
     /*.start__menu.slideDown {*/
     /*    width: 70%;*/
     /*}*/
-
     /*.difficulty__button {*/
     /*    min-width: 140px;*/
     /*}*/
-
     .gamearea {
         width: 100%;
     }
