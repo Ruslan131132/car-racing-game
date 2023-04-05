@@ -472,7 +472,7 @@ leaderBtn.addEventListener('click', () => {
             modalBody.innerHTML = response.data.map(item => {
                 return `<div class="user-item">
                 <div class="user-info">
-                    <img class="user-img" src="http://127.0.0.1:8000/storage/${item.avatar}">
+                    <img class="user-img" src="http://cordiant.4k-pr.com/storage/${item.avatar}">
                     <span class="user-mode">${item.mode}</span>
                 </div>
                 <span class="user-name">${item.tg}</span>
