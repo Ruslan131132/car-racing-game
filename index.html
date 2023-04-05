@@ -45,7 +45,7 @@
         <img class="points-background" src="image/points.svg">
         <span class="points-value">1300</span>
         <button class="play_again">
-<!--            <img src="image/icons/again.svg">-->
+            <!--            <img src="image/icons/again.svg">-->
         </button>
     </div>
     <div class="media-container">
@@ -53,10 +53,36 @@
             <img class="icon" src="image/icons/leader.svg">
             <img class="text" src="image/icons/leader-table-text.svg">
         </button>
-        <button class="change-mode-button" >
+        <button class="change-mode-button">
             <img class="icon" src="image/icons/wheel.svg">
             <img class="text" src="image/icons/change-mode-text.svg">
         </button>
+    </div>
+</div>
+<div class="modal-overlay" role="dialog">
+    <div class="modal" aria-modal="true" aria-labelledby="modal-title" role="document">
+        <div class="modal-header">
+            <span class="modal-close"
+                  onclick="this.parentElement.parentElement.parentElement.classList.remove('--show')">
+            </span>
+            <a href="#" class="management-button">
+                Следить за акциями<br>на покрышки в Telegram
+            </a>
+        </div>
+        <div class="modal-promo">
+            <img src="image/leader-table.png" width="100%">
+        </div>
+        <div class="modal-body">
+            <div class="user-item">
+                <div class="user-info">
+                    <img class="user-img" src="http://127.0.0.1:8000/storage/avatars/414983070.png">
+                    <span class="user-mode">ruskhas</span>
+                </div>
+
+                <span class="user-name">offroad</span>
+                <span class="user-points">12321321</span>
+            </div>
+        </div>
     </div>
 </div>
 <script src="script.js"></script>

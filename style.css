@@ -85,6 +85,13 @@ video {
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
+    -webkit-user-select: none;
+    /* user-select -- это нестандартное свойство */
+
+    -moz-user-select: none;
+    /* поэтому нужны префиксы */
+
+    -ms-user-select: none;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -100,6 +107,13 @@ menu,
 nav,
 section {
     display: block;
+    -webkit-user-select: none;
+    /* user-select -- это нестандартное свойство */
+
+    -moz-user-select: none;
+    /* поэтому нужны префиксы */
+
+    -ms-user-select: none;
 }
 
 body {
@@ -419,6 +433,180 @@ body {
     width: 100%;
 }
 
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease-in-out;
+}
+
+.modal {
+    position: fixed;
+    /*top: 50%;*/
+    /*left: 50%;*/
+    /*transform: translate(-50%, -70%);*/
+    background: radial-gradient(50% 50% at 50% 50%, #265D96 0%, #002954 100%);
+    transition: transform 0.3s ease-in-out;
+    height: calc(100% - 90px);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 45px;
+}
+
+.modal-overlay.--show {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-header {
+    font-size: 25px;
+    /*text-align: center;*/
+    /*position: relative;*/
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-close {
+    height: 84px;
+    width: 84px;
+    background-image: url(image/back.svg);
+    background-size: cover;
+}
+
+.modal-body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 10px;
+    height: 340px;
+}
+
+.modal-promo {
+    padding: 0 40px;
+    margin: 15px 0 40px;
+}
+
+.user-item {
+    position: relative;
+    opacity: 0.9;
+    height: 60px;
+    margin-bottom: 35px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+}
+
+.user-item:nth-child(-n + 3)::after {
+    width: 30px;
+    height: 30px;
+    display: block;
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.user-item:nth-child(-n + 3) {
+    background: #FFFFFF;
+}
+
+.user-item:nth-child(1)::after {
+    content: url(image/first.svg);
+}
+
+.user-item:nth-child(2)::after {
+    content: url(image/second.svg);
+}
+
+.user-item:nth-child(3)::after {
+    content: url(image/third.svg);
+}
+
+.user-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.user-mode {
+    font-style: italic;
+    font-weight: 700;
+    position: absolute;
+    bottom: -3px;
+    padding: 8px 10px;
+    gap: 10px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    color: #2E2563;
+    text-transform: uppercase;
+    font-size: 9px;
+}
+
+.user-item:nth-child(-n + 3) .user-mode{
+    background: #2E2563;
+    color: #FFFFFF;
+}
+
+.user-img {
+    width: 80px;
+    border-radius: 50%;
+    display: block;
+}
+
+.user-name {
+    left: 100px;
+    top: 50%;
+    transform: translate(0, -50%);
+    position: absolute;
+    right: 20px;
+    font-style: italic;
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: 400;
+}
+
+.user-points {
+    color: #FFFFFF;
+    font-weight: 600;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.user-item:nth-child(-n + 3) .user-name, .user-item:nth-child(-n + 3) .user-points{
+    color: #074989;
+}
+
+.management-button {
+    background: #55B2EF;
+    border-radius: 100px;
+    padding: 20px 40px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    text-decoration: none;
+    height: fit-content;
+}
+
 
 @media screen and (max-width: 550px) {
     .car,
@@ -451,6 +639,21 @@ body {
         height: 60px;
     }
 
+    .modal {
+        padding: 30px;
+        height: calc(100% - 60px);
+    }
+
+    .modal-close {
+        height: 75px;
+        width: 75px;
+    }
+
+    .management-button {
+        padding: 15px 30px;
+        font-size: 17px;
+    }
+
 }
 
 @media screen and (max-width: 500px) {
@@ -477,6 +680,15 @@ body {
     }
     .play_again {
         top: 12%;
+    }
+
+    .modal-close {
+        height: 70px;
+        width: 70px;
+    }
+
+    .management-button {
+        font-size: 15px;
     }
 }
 
@@ -509,6 +721,16 @@ body {
         margin-top: -45px;
         display: block;
         height: 140px;
+    }
+
+    .modal-close {
+        height: 65px;
+        width: 65px;
+    }
+
+    .management-button {
+        font-size: 13px;
+        padding: 15px 20px;
     }
 
 }

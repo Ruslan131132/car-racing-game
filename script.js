@@ -4,6 +4,7 @@ const score = document.querySelector('.score_container'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
     againBtn = document.querySelector('.play_again'),
     backToMenuBtn = document.querySelector('.change-mode-button'),
+    leaderBtn = document.querySelector('.leader-button'),
     screens = document.querySelectorAll('.screen'),
     screenGame = document.querySelector('.screen_game'),
     screenStart = document.querySelector('.screen_start'),
@@ -279,94 +280,41 @@ let swipeAction = function () {
     posX2 = posX1 - evt.clientX;
     posX1 = evt.clientX;
 
+    //РАБОЧАЯ ВЕРСИЯ
+    // keys.ArrowRight = false
+    // keys.ArrowLeft = false
+    // settings.x = Math.ceil(posX1) - 25
+    // if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
+    //     settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
+    // }
+    // if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
+    //     settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
+    // }
+    // return
 
-    posY2 = posY1 - evt.clientY;
-    posY1 = evt.clientY;
 
-
-    // if (posX1 == settings.x || Math.abs(posX1 - settings.x) < 30) {
-    keys.ArrowRight = false
-    keys.ArrowLeft = false
-    settings.x = Math.ceil(posX1) - 25
-    if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-        settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
+    //НОВАЯ ВЕРСИЯ
+    if (posX1 == settings.x || Math.abs(posX1 - settings.x) < 50) {
+        settings.x = Math.ceil(posX1) - 25
+        if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
+            settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
+        }
+        if (settings.x < (gameArea.offsetWidth * 100 / 590)) {
+            settings.x = (gameArea.offsetWidth * 100 / 590)
+        }
+        return
     }
-    if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
-        settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
+
+
+    if (posX1 - posInit > 0) {
+        if (settings.x < gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590) - 25) {
+            settings.x += settings.speed;
+        }
+    } else if (posX1 - posInit < 0) {
+        if (settings.x > (gameArea.offsetWidth * 100 / 590) + 25) {
+            settings.x -= settings.speed;
+        }
     }
-    return
-    // }
-
-
-    // if (posX1 - posInit > 0) {
-    //     keys.ArrowRight = true
-    //     keys.ArrowLeft = false
-    //     if (settings.x < gameArea.offsetWidth - car.offsetWidth) {
-    //         settings.x += settings.speed;
-    //     }
-    // } else if (posX1 - posInit < 0) {
-    //     keys.ArrowLeft = true
-    //     keys.ArrowRight = false
-    //     if (settings.x > 0) {
-    //         settings.x -= settings.speed;
-    //     }
-    // }
-    //
-    // console.log('posX2: ' + posX2)
-    // console.log(settings.x)
-    // console.log('posX1: ' + posX1)
-    // console.log('posY2: ' + posY2)
-    // console.log('posY1: ' + posY1)
-    // console.log('posInit: ' + posInit)
-
-    // определение действия свайп или скролл
-    // if (!isSwipe && !isScroll) {
-    //     let posY = Math.abs(posY2);
-    //     if (posY > 7 || posX2 === 0) {
-    //         isScroll = true;
-    //         allowSwipe = false;
-    //     } else if (posY < 7) {
-    //         isSwipe = true;
-    //     }
-    // }
-    //
-    // if (isSwipe) {
-    //     if (settings.x > 0) {
-    //         settings.x -= settings.speed;
-    //     }
-    //     if (settings.x < gameArea.offsetWidth - car.offsetWidth) {
-    //         settings.x += settings.speed;
-    //     }
-    //
-    //
-    //     console.log()
-    // // запрет ухода влево на первом слайде
-    // if (slideIndex === 0) {
-    //     if (posInit < posX1) {
-    //         setTransform(transform, 0);
-    //         return;
-    //     } else {
-    //         allowSwipe = true;
-    //     }
-    // }
-    //
-    // // запрет ухода вправо на последнем слайде
-    // if (slideIndex === --slides.length) {
-    //     if (posInit > posX1) {
-    //         setTransform(transform, lastTrf);
-    //         return;
-    //     } else {
-    //         allowSwipe = true;
-    //     }
-    // }
-    //
-    // // запрет протаскивания дальше одного слайда
-    // if (posInit > posX1 && transform < nextTrf || posInit < posX1 && transform > prevTrf) {
-    //     reachEdge();
-    //     return;
-    // }
-    // }
-
 }
 
 function startGame(event) {
@@ -434,12 +382,16 @@ function moveEnemy() {
                 carRect.bottom >= enemyRect.top - 2
             ) {
                 settings.start = false;
-
+                savePoints({
+                    mode: settings.mode,
+                    score: settings.score
+                });
                 audio.pause();
                 audio.currentTime = 0;
                 audio.autoplay = false;
                 settings.speed = 6
                 pointsValue.innerHTML = settings.score;
+                speedSum = settings.mode == 'gravity' ? settings.speed/2 : settings.speed
                 screenResult.classList.remove('screen_hide');
                 screenStart.classList.add('screen_hide');
                 screenGame.classList.add('screen_hide');
@@ -466,5 +418,55 @@ function moveEnemy() {
     })
 }
 
+leaderBtn.addEventListener('click', () => {
+    document.querySelector('.modal-overlay').classList.add('--show')
+    let modalBody = document.querySelector('.modal-body');
+    modalBody.innerHTML = ''
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://127.0.0.1:8000/api/getTopUsers', true);
+
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.send();
+
+    xhr.onload = function () {
+        if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
+            console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
+        } else { // если всё прошло гладко, выводим результат
+            console.log(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
+            let response = JSON.parse(xhr.response);
+            modalBody.innerHTML = response.data.map(item => {
+                return `<div class="user-item">
+                <div class="user-info">
+                    <img class="user-img" src="http://127.0.0.1:8000/storage/${item.avatar}">
+                    <span class="user-mode">${item.mode}</span>
+                </div>
+                <span class="user-name">${item.tg}</span>
+                <span class="user-points">${item.count}</span>
+            </div>`
+            }).join('');
+        }
+    };
+
+})
+
+function savePoints(data) {
+    const urlParams = new URLSearchParams(window.location.search);
+    let user_id = urlParams.get('user_id')
+
+    if (user_id == null) return;
+
+    let formData = JSON.stringify({
+        user_id: user_id,
+        count: data.score,
+        mode: data.mode
+    });
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://127.0.0.1:8000/api/addPoints', true);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.send(formData);
+}
 
 document.addEventListener('touchstart', swipeStart);
