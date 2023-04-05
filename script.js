@@ -457,7 +457,7 @@ leaderBtn.addEventListener('click', () => {
     let modalBody = document.querySelector('.modal-body');
     modalBody.innerHTML = ''
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://127.0.0.1:8000/api/getTopUsers', true);
+    xhr.open('GET', 'http://cordiant.4k-pr.com/api/getTopUsers', true);
 
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -497,7 +497,7 @@ function savePoints(data) {
     });
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://127.0.0.1:8000/api/addPoints', true);
+    xhr.open('POST', 'http://cordiant.4k-pr.com/api/addPoints', true);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.send(formData);
