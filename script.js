@@ -40,10 +40,13 @@ car.classList.add('car');
 document.addEventListener('keydown', startGame);
 document.addEventListener('keyup', stopGame);
 
-const music = ['./audio/game-audio.mp3'];
+const music = ['./audio/game-audio.wav', './audio/boom.wav'];
 const audio = new Audio();
 audio.src = music[0];
 audio.volume = 0.1;
+const boomAudio = new Audio();
+boomAudio.src = music[1];
+boomAudio.volume = 0.1;
 
 const keys = {
     ArrowDown: false,
@@ -381,6 +384,7 @@ function moveEnemy() {
                 carRect.left <= enemyRect.right - 2 &&
                 carRect.bottom >= enemyRect.top - 2
             ) {
+                boomAudio.play()
                 settings.start = false;
                 savePoints({
                     mode: settings.mode,
@@ -392,12 +396,42 @@ function moveEnemy() {
                 settings.speed = 6
                 pointsValue.innerHTML = settings.score;
                 speedSum = settings.mode == 'gravity' ? settings.speed/2 : settings.speed
-                screenResult.classList.remove('screen_hide');
-                screenStart.classList.add('screen_hide');
-                screenGame.classList.add('screen_hide');
-                againBtn.classList.add(settings.mode);
-                screenGame.classList.remove('screen-up')
-                screenGame.style.marginTop = '0'
+                const boom = document.createElement('div');
+                boom.classList.add('boom');
+
+
+
+                //ПОЗИЦИЯ ПО X
+                if (carRect.right - enemyRect.left < 15) {
+                    boom.style.left = enemyRect.left - 25 + 'px'
+                } else if (enemyRect.right - carRect.left < 15 ) {
+                    boom.style.left = carRect.left - 25 + 'px'
+                } else {
+                    boom.style.left = carRect.left + ((carRect.right - carRect.left )/2) - 25 + 'px'
+                }
+
+                //ПОЗИЦИЯ ПО Y
+                if (enemyRect.bottom - carRect.top < 10) {
+                    boom.style.top = carRect.top - 25 + 'px';
+                } else if (carRect.bottom - enemyRect.top < 10 ) {
+                    boom.style.top = enemyRect.top - 25 + 'px';
+                } else {
+                    boom.style.top = enemyRect.top + 25 + 'px';
+                }
+
+
+                setTimeout(() => {
+                    boomAudio.pause();
+                    boomAudio.currentTime = 0;
+                    screenResult.classList.remove('screen_hide');
+                    screenStart.classList.add('screen_hide');
+                    screenGame.classList.add('screen_hide');
+                    againBtn.classList.add(settings.mode);
+                    screenGame.classList.remove('screen-up')
+                    screenGame.style.marginTop = '0'
+                }, 2000);
+
+                gameArea.append(boom);
             }
             item.y += speedSum;
             item.style.top = item.y + 'px';
