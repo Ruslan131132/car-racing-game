@@ -41,13 +41,16 @@ car.classList.add('car');
 document.addEventListener('keydown', startGame);
 document.addEventListener('keyup', stopGame);
 
-const music = ['./audio/game-audio.wav', './audio/boom.wav'];
+const music = ['./audio/game-audio.wav', './audio/boom.wav', './audio/splash.wav'];
 const audio = new Audio();
 audio.src = music[0];
 audio.volume = 0.1;
 const boomAudio = new Audio();
 boomAudio.src = music[1];
 boomAudio.volume = 0.1;
+const splashAudio = new Audio();
+splashAudio.src = music[2];
+splashAudio.volume = 0.1;
 
 const keys = {
     ArrowDown: false,
@@ -396,6 +399,7 @@ function moveEnemy() {
             let carRect = car.getBoundingClientRect();
             let enemyRect = enemies[0].getBoundingClientRect();
             if (carRect.top - enemyRect.bottom < 5 && carRect.top - enemyRect.bottom > - 5) {
+                splashAudio.play()
                 splash.classList.remove('hide');
                 splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
                 splash.style.top = carRect.top + 'px';
