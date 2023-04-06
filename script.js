@@ -522,6 +522,13 @@ function moveEnemy() {
     // })
 }
 
+// function moveBackEnemy()
+// {
+//
+// }
+
+
+
 leaderBtn.onclick = () => {
     document.querySelector('.modal-overlay').classList.add('--show')
     let modalBody = document.querySelector('.modal-body');
@@ -573,4 +580,36 @@ function savePoints(data) {
     xhr.send(formData);
 }
 
-document.addEventListener('touchstart', swipeStart);
+
+// let intervalTimer
+// document.addEventListener('touchstart', swipeStart);
+gameArea.addEventListener('touchstart', function(e){
+    let divWidth = gameArea.clientWidth;
+    let clickX = e.touches[0].clientX;
+    console.log(gameArea.clientWidth)
+    console.log(clickX)
+    if (clickX > divWidth/2) {
+        keys.ArrowRight = true;
+        // intervalTimer = setInterval(function() {
+        //     if (settings.x < gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
+        //         settings.x += settings.speed;
+        //     }
+        // }, 10);
+    } else {
+        keys.ArrowLeft  = true;
+        // intervalTimer = setInterval(function() {
+        //     if (settings.x > (gameArea.offsetWidth * 100 / 590)) {
+        //         settings.x -= settings.speed;
+        //     }
+        // }, 10);
+    }
+});
+
+gameArea.addEventListener('touchend', function(){
+    keys.ArrowRight = false;
+    keys.ArrowLeft  = false;
+});
+//
+// gameArea.addEventListener('touchcancel', function(){
+//     clearInterval(intervalTimer);
+// });
