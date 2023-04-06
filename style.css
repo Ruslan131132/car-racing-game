@@ -651,6 +651,29 @@ body {
     height: fit-content;
 }
 
+.trust-scroll__image{
+    position: relative;
+    width: 100%;
+    height: 80px;
+}
+
+.trust-scroll__image:before{
+    content: url(image/scroll-mouse.svg);
+    transform: translate3d(-50%, 0, 0);
+    animation: spin 2s infinite linear;
+    position: absolute;
+    left: 50%;
+    bottom: 120px;
+}
+
+@keyframes spin {
+    0%, 100% {
+        transform: translate(-90px, 0);
+    }
+    50% {
+        transform: translate(40px,0);
+    }
+}
 
 @media screen and (max-width: 550px) {
     .car,

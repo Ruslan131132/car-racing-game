@@ -9,6 +9,7 @@ const score = document.querySelector('.score_container'),
     screenStart = document.querySelector('.screen_start'),
     screenResult = document.querySelector('.screen_result'),
     puddle = document.querySelector('.puddle'),
+    trustScroll = document.querySelector('.trust-scroll__image'),
     pointsValue = document.querySelector('.points-value');
 
 let allowSwipe = true;
@@ -168,6 +169,12 @@ function generateGame() {
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
     screenGame.classList.add('screen-up')
+    trustScroll.style.display = 'block'
+    setTimeout(() => {
+        trustScroll.style.display = 'none'
+    }, 3000);
+
+
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
         const line_block = document.createElement('div');
@@ -257,7 +264,8 @@ function generateGame() {
     settings.y = car.offsetTop;
     audio.autoplay = true;
     audio.play();
-    requestAnimationFrame(playGame);
+    playGame();
+    // requestAnimationFrame(playGame);
 }
 
 let getEvent = function () {
@@ -288,30 +296,6 @@ let swipeEnd = function () {
 
     keys.ArrowRight = false
     keys.ArrowLeft = false
-
-    // if (posInit < posX1) {
-    //     slideIndex--;
-    // } else if (posInit > posX1) {
-    //     slideIndex++;
-    // }
-    //
-
-    // if (allowSwipe) {
-    //     if (Math.abs(posFinal) > posThreshold) {
-    //
-    //     }
-    //
-    //     if (posInit !== posX1) {
-    //         allowSwipe = false;
-    //         slide();
-    //     } else {
-    //         allowSwipe = true;
-    //     }
-    //
-    // } else {
-    //     allowSwipe = true;
-    // }
-
 }
 
 
@@ -391,7 +375,8 @@ function playGame() {
         }
         car.style.top = settings.y + 'px';
         car.style.left = settings.x + 'px';
-        requestAnimationFrame(playGame);
+        // requestAnimationFrame(playGame);
+        setTimeout(playGame, 1000 / 100)
     }
 }
 
