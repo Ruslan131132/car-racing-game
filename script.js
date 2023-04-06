@@ -415,7 +415,7 @@ function moveEnemy() {
         } else if (index == 4) {
             let carRect = car.getBoundingClientRect();
             let enemyRect = enemies[0].getBoundingClientRect();
-            if (carRect.top - enemyRect.bottom < puddleSpeedSum && carRect.top - enemyRect.bottom > -puddleSpeedSum) {
+            if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
                 splashAudio.play()
                 splash.classList.remove('hide');
                 splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
