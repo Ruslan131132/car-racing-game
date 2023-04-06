@@ -14,7 +14,7 @@ const score = document.querySelector('.score_container'),
 
 //Лужа
 const puddle = document.createElement('div');
-puddle.classList.add('enemy');
+// puddle.classList.add('enemy');
 puddle.classList.add('puddle');
 puddle.y = -2500;
 puddle.style.top = '-2500px';
@@ -27,7 +27,7 @@ splash.classList.add('hide');
 
 //МАШИНА НА ДРУГОЙ ПОЛОСЕ
 const enemyBack = document.createElement('div');
-enemyBack.classList.add('enemy');
+// enemyBack.classList.add('enemy');
 enemyBack.classList.add('back');
 enemyBack.style.transform = 'rotate(180deg)'
 enemyBack.y = - 2000
@@ -35,7 +35,8 @@ enemyBack.style.top = '-2000px';
 enemyBack.style.left = '-30px'
 
 
-let lines;
+let lines,//блоки заднего фона
+ enemies; //препятствия
 
 let allowSwipe = true;
 
@@ -55,7 +56,7 @@ let enemyStyles = [];
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyPositions = [
     (gameArea.offsetWidth * 165 / 590) + 'px',
-    // gameArea.offsetWidth * 0.5 + 'px',
+    gameArea.offsetWidth * 0.5 + 'px',
     (gameArea.offsetWidth * 425 / 590) + 'px',
 ];
 const enemyOffsets = [-20, -10, 10, 20];
@@ -106,7 +107,7 @@ function random(num) {
 }
 
 diffBtn.forEach(item => {
-    item.addEventListener('click', () => {
+    item.onclick = () => {
         if (item.classList.contains('offroad')) {
             settings.mode = 'offroad'
             enemyStyles = [
@@ -169,25 +170,21 @@ diffBtn.forEach(item => {
             ];
             generateGame()
         }
-    });
+    };
 });
-
-// againBtn.addEventListener('click', (event) => {
-//    generateGame()
-// });
 
 againBtn.onclick = () => {
     generateGame()
 }
 
-backToMenuBtn.addEventListener('click', (event) => {
+backToMenuBtn.onclick = () => {
     screenResult.classList.add('screen_hide');
     screenGame.classList.add('screen_hide')
     screenStart.classList.remove('screen_hide');
     screenStart.classList.add('screen_show');
     screenGame.classList.remove('screen-up')
     screenGame.style.marginTop = null
-});
+}
 
 function generateGame() {
     gameArea.innerHTML = '';
@@ -232,7 +229,7 @@ function generateGame() {
 
             const enemy = document.createElement('div');
             enemy.classList.add('enemy');
-            // enemy.dataset.line = i;
+            enemy.dataset.line = i;
             enemy.dataset.pos = carPos;
             enemy.dataset.offset = enemyOffset;
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
@@ -250,6 +247,7 @@ function generateGame() {
     }
 
     lines = document.querySelectorAll('.line_block');
+    enemies = document.querySelectorAll('.enemy');
 
 
     puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
@@ -277,58 +275,58 @@ function generateGame() {
     requestAnimationFrame(playGame);
 }
 
-// let getEvent = function () {
-//     return (event.type.search('touch') !== -1) ? event.touches[0] : event;
-// }
+let getEvent = function () {
+    return (event.type.search('touch') !== -1) ? event.touches[0] : event;
+}
 
-// let swipeStart = function () {
-//     let evt = getEvent();
-//     if (allowSwipe) {
-//
-//         posInit = posX1 = evt.clientX;
-//         posY1 = evt.clientY;
-//         //если страница с игрой и игра идет?
-//
-//         document.addEventListener('touchmove', swipeAction);
-//         document.addEventListener('touchend', swipeEnd);
-//     }
-// }
-//
-// let swipeEnd = function () {
-//     posFinal = posInit - posX1;
-//
-//     isScroll = false;
-//     isSwipe = false;
-//
-//     document.removeEventListener('touchmove', swipeAction);
-//     document.removeEventListener('touchend', swipeEnd);
-//
-//     keys.ArrowRight = false
-//     keys.ArrowLeft = false
-// }
+let swipeStart = function () {
+    let evt = getEvent();
+    if (allowSwipe) {
 
+        posInit = posX1 = evt.clientX;
+        posY1 = evt.clientY;
+        //если страница с игрой и игра идет?
 
-// let swipeAction = function () {
-//
-//     let evt = getEvent();
-//
-//     posX2 = posX1 - evt.clientX;
-//     posX1 = evt.clientX;
-//
-//     //РАБОЧАЯ ВЕРСИЯ
-//     keys.ArrowRight = false
-//     keys.ArrowLeft = false
-//     settings.x = Math.ceil(posX1) - 25
-//     if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-//         settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
-//     }
-//     if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
-//         settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
-//     }
-//     return
+        document.addEventListener('touchmove', swipeAction);
+        document.addEventListener('touchend', swipeEnd);
+    }
+}
+
+let swipeEnd = function () {
+    posFinal = posInit - posX1;
+
+    isScroll = false;
+    isSwipe = false;
+
+    document.removeEventListener('touchmove', swipeAction);
+    document.removeEventListener('touchend', swipeEnd);
+
+    keys.ArrowRight = false
+    keys.ArrowLeft = false
+}
 
 
-    //НОВАЯ ВЕРСИЯ
+let swipeAction = function () {
+
+    let evt = getEvent();
+
+    posX2 = posX1 - evt.clientX;
+    posX1 = evt.clientX;
+
+    //РАБОЧАЯ ВЕРСИЯ
+    keys.ArrowRight = false
+    keys.ArrowLeft = false
+    settings.x = Math.ceil(posX1) - 25
+    if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
+        settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
+    }
+    if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
+        settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
+    }
+    return
+
+
+    // НОВАЯ ВЕРСИЯ
     // if (posX1 == settings.x || Math.abs(posX1 - settings.x) < 50) {
     //     settings.x = Math.ceil(posX1) - 25
     //     if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
@@ -350,7 +348,7 @@ function generateGame() {
     //         settings.x -= settings.speed;
     //     }
     // }
-// }
+}
 
 function startGame(event) {
     event.preventDefault();
@@ -407,7 +405,7 @@ function moveRoad() {
 }
 
 function moveEnemy() {
-    activeEnemiesLines.forEach(function (enemies, index) {
+    // activeEnemiesLines.forEach(function (enemies, index) {
         // if (index == 5) {
         //     enemies[0].y += 2.5 * speedSum;
         //     enemies[0].style.top = enemies[0].y + 'px';
@@ -507,10 +505,10 @@ function moveEnemy() {
             item.style.top = item.y + 'px';
             if (item.y >= document.documentElement.clientHeight) {
                 item.y = -2000 + document.documentElement.clientHeight;
-                let carPos = lineAvailablePositions[index][0];
+                let carPos = lineAvailablePositions[item.dataset.line][0];
                 let chosen_enemy = enemyStyles[random(enemyStyles.length)]
                 item.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
-                lineAvailablePositions[index] = [item.dataset.pos]
+                lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
                 item.dataset.pos = carPos;
 
                 item.style.background =
@@ -521,7 +519,7 @@ function moveEnemy() {
         });
         // }
 
-    })
+    // })
 }
 
 leaderBtn.onclick = () => {
@@ -575,4 +573,4 @@ function savePoints(data) {
     xhr.send(formData);
 }
 
-// document.addEventListener('touchstart', swipeStart);
+document.addEventListener('touchstart', swipeStart);

@@ -189,7 +189,7 @@ body {
     height: 157px;
     background-image: url(image/offroad/puddle.svg);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100%;
     background-position: center;
     position: absolute;
     z-index: 5;
