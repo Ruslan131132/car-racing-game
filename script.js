@@ -358,7 +358,7 @@ function playGame() {
             speedSum += speedSumInc
             puddleSpeedSum += puddleSpeedSumInc
         }
-        // score.innerHTML = settings.score;
+        score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
         if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
