@@ -5,10 +5,10 @@ const score = document.querySelector('.score_container'),
     againBtn = document.querySelector('.play_again'),
     backToMenuBtn = document.querySelector('.change-mode-button'),
     leaderBtn = document.querySelector('.leader-button'),
-    screens = document.querySelectorAll('.screen'),
     screenGame = document.querySelector('.screen_game'),
     screenStart = document.querySelector('.screen_start'),
     screenResult = document.querySelector('.screen_result'),
+    puddle = document.querySelector('.puddle'),
     pointsValue = document.querySelector('.points-value');
 
 let allowSwipe = true;
@@ -168,7 +168,6 @@ function generateGame() {
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
     screenGame.classList.add('screen-up')
-
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
         const line_block = document.createElement('div');
@@ -182,10 +181,8 @@ function generateGame() {
     for (let i = 0; i < 4; i++) {//lines
         let y = -500 * (i + 1);
 
-        let countCars = Math.floor(Math.random() * 2) + 1; // количество машин на одной полосе
-
+        let countCars = i % 2 == 0 ? 1 : 2; // количество машин на одной полосе
         let enemyOffsetsArray = JSON.parse(JSON.stringify(enemyOffsets));
-
         activeEnemiesLines[i] = []
         lineAvailablePositions[i] = [...enemyPositions];
 
@@ -220,7 +217,8 @@ function generateGame() {
     puddle.classList.add('puddle');
     puddle.y = -2500;
     puddle.style.top = '-2500px';
-    puddle.style.left = (gameArea.offsetWidth * 101 / 590) + 'px',
+    puddle.style.left = (gameArea.offsetWidth * 101 / 590) + 'px';
+    puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
     // gameArea.append(puddle);
     gameArea.appendChild(puddle);
     activeEnemiesLines[4] = [puddle];
@@ -398,7 +396,7 @@ function moveEnemy() {
         if (index == 4) {
             let carRect = car.getBoundingClientRect();
             let enemyRect = enemies[0].getBoundingClientRect();
-            if (carRect.top - enemyRect.bottom < 5 && carRect.top - enemyRect.bottom > - 5) {
+            if (carRect.top - enemyRect.bottom < puddleSpeedSum && carRect.top - enemyRect.bottom > -puddleSpeedSum) {
                 splashAudio.play()
                 splash.classList.remove('hide');
                 splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
@@ -465,7 +463,7 @@ function moveEnemy() {
 
 
                 setTimeout(() => {
-                    // gameArea.innerHTML = '';
+                    gameArea.innerHTML = '';
                     boomAudio.pause();
                     boomAudio.currentTime = 0;
                     screenResult.classList.remove('screen_hide');
@@ -517,7 +515,7 @@ leaderBtn.addEventListener('click', () => {
             modalBody.innerHTML = response.data.map(item => {
                 return `<div class="user-item">
                 <div class="user-info">
-                    <img class="user-img" src="http://cordiant.4k-pr.com/storage/${item.avatar}">
+                    <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/user.jpg'}">
                     <span class="user-mode">${item.mode}</span>
                 </div>
                 <span class="user-name">${item.tg}</span>
