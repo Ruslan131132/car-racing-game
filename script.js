@@ -264,8 +264,8 @@ function generateGame() {
     settings.y = car.offsetTop;
     audio.autoplay = true;
     audio.play();
-    playGame();
-    // requestAnimationFrame(playGame);
+    // playGame();
+    requestAnimationFrame(playGame);
 }
 
 let getEvent = function () {
@@ -360,7 +360,7 @@ function playGame() {
         }
         score.innerHTML = settings.score;
         moveRoad();
-        moveEnemy();
+        // moveEnemy();
         if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
             settings.x -= settings.speed;
         }
@@ -375,8 +375,8 @@ function playGame() {
         }
         car.style.top = settings.y + 'px';
         car.style.left = settings.x + 'px';
-        // requestAnimationFrame(playGame);
-        setTimeout(playGame, 1000 / 100)
+        requestAnimationFrame(playGame);
+        // setTimeout(playGame, 1000 / 120)
     }
 }
 
