@@ -14,7 +14,6 @@ const score = document.querySelector('.score_container'),
 
 //Лужа
 const puddle = document.createElement('div');
-// puddle.classList.add('enemy');
 puddle.classList.add('puddle');
 puddle.y = -2500;
 puddle.style.top = '-2500px';
@@ -28,15 +27,15 @@ splash.classList.add('hide');
 //МАШИНА НА ДРУГОЙ ПОЛОСЕ
 const enemyBack = document.createElement('div');
 // enemyBack.classList.add('enemy');
-enemyBack.classList.add('back');
+enemyBack.classList.add('enemy-back');
 enemyBack.style.transform = 'rotate(180deg)'
-enemyBack.y = - 2000
+enemyBack.y = -2000
 enemyBack.style.top = '-2000px';
 enemyBack.style.left = '-30px'
 
 
 let lines,//блоки заднего фона
- enemies; //препятствия
+    enemies; //препятствия
 
 let allowSwipe = true;
 
@@ -242,14 +241,11 @@ function generateGame() {
             enemy.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
             gameArea.append(enemy);
             gameArea.appendChild(enemy);
-            activeEnemiesLines[i].push(enemy)
         }
     }
 
     lines = document.querySelectorAll('.line_block');
     enemies = document.querySelectorAll('.enemy');
-
-
     puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
     gameArea.appendChild(puddle);
     gameArea.appendChild(splash);
@@ -262,6 +258,7 @@ function generateGame() {
             'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
         enemyBack.style.width = chosen_enemy.width
         enemyBack.style.height = chosen_enemy.height
+        enemyBack.style.display = 'block'
         gameArea.appendChild(enemyBack);
     }
 
@@ -368,6 +365,8 @@ function playGame() {
         score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
+        moveBackEnemy();
+        movePuddle();
         if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
             settings.x -= settings.speed;
         }
@@ -405,128 +404,121 @@ function moveRoad() {
 }
 
 function moveEnemy() {
-    // activeEnemiesLines.forEach(function (enemies, index) {
-        // if (index == 5) {
-        //     enemies[0].y += 2.5 * speedSum;
-        //     enemies[0].style.top = enemies[0].y + 'px';
-        //     if (enemies[0].y >= document.documentElement.clientHeight) {
-        //         enemies[0].y = -1800;
-        //         let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-        //         enemies[0].style.background =
-        //             'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-        //         enemies[0].style.width = chosen_enemy.width
-        //         enemies[0].style.height = chosen_enemy.height
-        //     }
-        //     return;
-        // } else if (index == 4) {
-        //     let carRect = car.getBoundingClientRect();
-        //     let enemyRect = enemies[0].getBoundingClientRect();
-        //     if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
-        //         splashAudio.play()
-        //         splash.classList.remove('hide');
-        //         splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
-        //         splash.style.top = carRect.top + 'px';
-        //         setTimeout(() => {
-        //             splash.classList.add('splash-after');
-        //             splash.style.left = carRect.left - (gameArea.offsetWidth * 300 / 590 / 2) + 25 + 'px'
-        //             splash.style.top = carRect.top + 'px';
-        //             setTimeout(() => {
-        //                 splash.classList.remove('splash-after');
-        //                 splash.classList.add('hide');
-        //             }, 100);
-        //         }, 100);
-        //     }
-        //     enemies[0].y += puddleSpeedSum;
-        //     enemies[0].style.top = enemies[0].y + 'px';
-        //     if (enemies[0].y >= document.documentElement.clientHeight) {
-        //         enemies[0].y = -2500;
-        //     }
-        //     return;
-        // } else {
-        enemies.forEach(function (item) {
-            let carRect = car.getBoundingClientRect();
-            let enemyRect = item.getBoundingClientRect();
-            if (
-                carRect.top <= enemyRect.bottom - 2 &&
-                carRect.right >= enemyRect.left - 2 &&
-                carRect.left <= enemyRect.right - 2 &&
-                carRect.bottom >= enemyRect.top - 2
-            ) {
-                boomAudio.play()
-                settings.start = false;
-                savePoints({
-                    mode: settings.mode,
-                    score: settings.score
-                });
-                audio.pause();
-                audio.currentTime = 0;
-                audio.autoplay = false;
-                settings.speed = 6
-                pointsValue.innerHTML = settings.score;
-                speedSum = settings.mode == 'gravity' ? settings.speed/2 : settings.speed
-                puddleSpeedSum = settings.speed;
-                const boom = document.createElement('div');
-                boom.classList.add('boom');
+    enemies.forEach(function (item) {
+        let carRect = car.getBoundingClientRect();
+        let enemyRect = item.getBoundingClientRect();
+        if (
+            carRect.top <= enemyRect.bottom - 2 &&
+            carRect.right >= enemyRect.left - 2 &&
+            carRect.left <= enemyRect.right - 2 &&
+            carRect.bottom >= enemyRect.top - 2
+        ) {
+            boomAudio.play()
+            settings.start = false;
+            savePoints({
+                mode: settings.mode,
+                score: settings.score
+            });
+            audio.pause();
+            audio.currentTime = 0;
+            audio.autoplay = false;
+            settings.speed = 6
+            pointsValue.innerHTML = settings.score;
+            speedSum = settings.mode == 'gravity' ? settings.speed / 2 : settings.speed
+            puddleSpeedSum = settings.speed;
+            const boom = document.createElement('div');
+            boom.classList.add('boom');
 
-                //ПОЗИЦИЯ ПО X
-                if (carRect.right - enemyRect.left < 15) {
-                    boom.style.left = enemyRect.left - 25 + 'px'
-                } else if (enemyRect.right - carRect.left < 15 ) {
-                    boom.style.left = carRect.left - 25 + 'px'
-                } else {
-                    boom.style.left = carRect.left + ((carRect.right - carRect.left )/2) - 25 + 'px'
-                }
-
-                //ПОЗИЦИЯ ПО Y
-                if (enemyRect.bottom - carRect.top < 10) {
-                    boom.style.top = carRect.top - 25 + 'px';
-                } else if (carRect.bottom - enemyRect.top < 10 ) {
-                    boom.style.top = enemyRect.top - 25 + 'px';
-                } else {
-                    boom.style.top = enemyRect.top + 25 + 'px';
-                }
-
-
-                setTimeout(() => {
-                    // gameArea.innerHTML = '';
-                    boomAudio.pause();
-                    boomAudio.currentTime = 0;
-                    screenResult.classList.remove('screen_hide');
-                    screenStart.classList.add('screen_hide');
-                    screenGame.classList.add('screen_hide');
-                    againBtn.classList.add(settings.mode);
-                    screenGame.classList.remove('screen-up')
-                    screenGame.style.marginTop = '0'
-                }, 2000);
-
-                gameArea.append(boom);
+            //ПОЗИЦИЯ ПО X
+            if (carRect.right - enemyRect.left < 15) {
+                boom.style.left = enemyRect.left - 25 + 'px'
+            } else if (enemyRect.right - carRect.left < 15) {
+                boom.style.left = carRect.left - 25 + 'px'
+            } else {
+                boom.style.left = carRect.left + ((carRect.right - carRect.left) / 2) - 25 + 'px'
             }
-            item.y += speedSum;
-            item.style.top = item.y + 'px';
-            if (item.y >= document.documentElement.clientHeight) {
-                item.y = -2000 + document.documentElement.clientHeight;
-                let carPos = lineAvailablePositions[item.dataset.line][0];
-                let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-                item.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
-                lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
-                item.dataset.pos = carPos;
 
-                item.style.background =
-                    'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-                item.style.width = chosen_enemy.width
-                item.style.height = chosen_enemy.height
+            //ПОЗИЦИЯ ПО Y
+            if (enemyRect.bottom - carRect.top < 10) {
+                boom.style.top = carRect.top - 25 + 'px';
+            } else if (carRect.bottom - enemyRect.top < 10) {
+                boom.style.top = enemyRect.top - 25 + 'px';
+            } else {
+                boom.style.top = enemyRect.top + 25 + 'px';
             }
-        });
-        // }
 
-    // })
+
+            setTimeout(() => {
+                // gameArea.innerHTML = '';
+                boomAudio.pause();
+                boomAudio.currentTime = 0;
+                screenResult.classList.remove('screen_hide');
+                screenStart.classList.add('screen_hide');
+                screenGame.classList.add('screen_hide');
+                againBtn.classList.add(settings.mode);
+                screenGame.classList.remove('screen-up')
+                screenGame.style.marginTop = '0'
+            }, 2000);
+
+            gameArea.append(boom);
+        }
+        item.y += speedSum;
+        item.style.top = item.y + 'px';
+        if (item.y >= document.documentElement.clientHeight) {
+            item.y = -2000 + document.documentElement.clientHeight;
+            let carPos = lineAvailablePositions[item.dataset.line][0];
+            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+            item.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
+            lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
+            item.dataset.pos = carPos;
+
+            item.style.background =
+                'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
+            item.style.width = chosen_enemy.width
+            item.style.height = chosen_enemy.height
+        }
+    });
 }
 
-// function moveBackEnemy()
-// {
-//
-// }
+function moveBackEnemy() {
+    if (settings.mode == 'gravity') {
+        enemyBack.y += 2.5 * speedSum;
+        enemyBack.style.top = enemyBack.y + 'px';
+        if (enemyBack.y >= document.documentElement.clientHeight) {
+            enemyBack.y = -1800;
+            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+            enemyBack.style.background =
+                'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
+            enemyBack.style.width = chosen_enemy.width
+            enemyBack.style.height = chosen_enemy.height
+        }
+    }
+}
 
+function movePuddle() {
+    let carRect = car.getBoundingClientRect();
+    let enemyRect = puddle.getBoundingClientRect();
+    if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
+        splashAudio.play()
+        splash.classList.remove('hide');
+        splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
+        splash.style.top = carRect.top + 'px';
+        setTimeout(() => {
+            splash.classList.add('splash-after');
+            splash.style.left = carRect.left - (gameArea.offsetWidth * 300 / 590 / 2) + 25 + 'px'
+            splash.style.top = carRect.top + 'px';
+            setTimeout(() => {
+                splash.classList.remove('splash-after');
+                splash.classList.add('hide');
+            }, 100);
+        }, 100);
+    }
+    puddle.y += puddleSpeedSum;
+    puddle.style.top = puddle.y + 'px';
+    if (puddle.y >= document.documentElement.clientHeight) {
+        puddle.y = -2500;
+    }
+}
 
 
 leaderBtn.onclick = () => {
@@ -581,35 +573,19 @@ function savePoints(data) {
 }
 
 
-// let intervalTimer
 // document.addEventListener('touchstart', swipeStart);
-gameArea.addEventListener('touchstart', function(e){
+gameArea.addEventListener('touchstart', function (e) {
+    e.preventDefault();
     let divWidth = gameArea.clientWidth;
     let clickX = e.touches[0].clientX;
-    console.log(gameArea.clientWidth)
-    console.log(clickX)
-    if (clickX > divWidth/2) {
+    if (clickX > divWidth / 2) {
         keys.ArrowRight = true;
-        // intervalTimer = setInterval(function() {
-        //     if (settings.x < gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-        //         settings.x += settings.speed;
-        //     }
-        // }, 10);
     } else {
-        keys.ArrowLeft  = true;
-        // intervalTimer = setInterval(function() {
-        //     if (settings.x > (gameArea.offsetWidth * 100 / 590)) {
-        //         settings.x -= settings.speed;
-        //     }
-        // }, 10);
+        keys.ArrowLeft = true;
     }
 });
 
-gameArea.addEventListener('touchend', function(){
+gameArea.addEventListener('touchend', function () {
     keys.ArrowRight = false;
-    keys.ArrowLeft  = false;
+    keys.ArrowLeft = false;
 });
-//
-// gameArea.addEventListener('touchcancel', function(){
-//     clearInterval(intervalTimer);
-// });

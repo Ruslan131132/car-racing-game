@@ -184,9 +184,15 @@ body {
     z-index: 6;
 }
 
+.enemy-back {
+    transform: rotate(180deg);
+    display: none;
+    position: absolute;
+}
+
 .puddle {
-    width: calc(100% * 390 / 590) !important;
-    height: 157px;
+    width: calc(100% * 385 / 590) !important;
+    height: calc(100vw * 135 / 590);
     background-image: url(image/offroad/puddle.svg);
     background-repeat: no-repeat;
     background-size: 100%;
