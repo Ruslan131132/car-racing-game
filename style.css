@@ -680,6 +680,51 @@ body {
     bottom: 120px;
 }
 
+.actions {
+    display: none;
+    justify-content: space-between;
+    padding: 0 calc(100% * 105 / 590) 80px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 11;
+}
+
+.action-left, .action-right {
+    width: 84px;
+    height: 84px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: 1px solid #FFFFFF;
+    box-shadow: inset -6px -6px 6px rgba(0, 0, 0, 0.25), inset 6px 6px 6px rgba(146, 216, 255, 0.25);
+    border-radius: 20px;
+    background-color: #005387;
+}
+
+.action-left {
+    background-image: url(image/left.svg);
+}
+
+.action-right {
+    background-image: url(image/right.svg);
+}
+
+.action-left.active, .action-right.active {
+    box-shadow: inset -6px 6px 6px rgba(0, 0, 0, 0.25);
+    background-size: 66px;
+}
+
+.action-left.active {
+    background-image: url(image/left-active.svg);
+}
+
+.action-right.active {
+    background-image: url(image/right-active.svg);
+}
+
+
 @keyframes spin {
     0%, 100% {
         transform: translate(-90px, 0);

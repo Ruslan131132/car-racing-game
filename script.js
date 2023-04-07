@@ -9,7 +9,10 @@ const score = document.querySelector('.score_container'),
     screenStart = document.querySelector('.screen_start'),
     screenResult = document.querySelector('.screen_result'),
     trustScroll = document.querySelector('.trust-scroll__image'),
-    pointsValue = document.querySelector('.points-value');
+    pointsValue = document.querySelector('.points-value'),
+    leftBtn = document.querySelector('.action-left'),
+    rightBtn = document.querySelector('.action-right'),
+    actionsBtns = document.querySelector('.actions');
 
 
 //Лужа
@@ -193,10 +196,11 @@ function generateGame() {
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
     screenGame.classList.add('screen-up')
-    trustScroll.style.display = 'block'
-    setTimeout(() => {
-        trustScroll.style.display = 'none'
-    }, 3000);
+    actionsBtns.style.display = 'flex';
+    // trustScroll.style.display = 'block'
+    // setTimeout(() => {
+    //     actionsBtns.style.display = 'none';
+    // }, 3000);
 
 
     // ГЕНЕРАЦИЯ ПОЛЯ
@@ -580,12 +584,37 @@ gameArea.addEventListener('touchstart', function (e) {
     let clickX = e.touches[0].clientX;
     if (clickX > divWidth / 2) {
         keys.ArrowRight = true;
+        rightBtn.classList.add('active')
     } else {
         keys.ArrowLeft = true;
+        leftBtn.classList.add('active')
     }
 });
 
 gameArea.addEventListener('touchend', function () {
     keys.ArrowRight = false;
     keys.ArrowLeft = false;
+    rightBtn.classList.remove('active')
+    leftBtn.classList.remove('active')
+});
+
+
+leftBtn.addEventListener('touchstart', function (e) {
+    keys.ArrowLeft = true;
+    leftBtn.classList.add('active')
+});
+
+leftBtn.addEventListener('touchend', function (e) {
+    keys.ArrowLeft = false;
+    leftBtn.classList.remove('active')
+});
+
+rightBtn.addEventListener('touchstart', function (e) {
+    keys.ArrowRight = true;
+    rightBtn.classList.add('active')
+});
+
+rightBtn.addEventListener('touchend', function (e) {
+    keys.ArrowRight = false;
+    rightBtn.classList.remove('active')
 });
