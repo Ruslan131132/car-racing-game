@@ -199,6 +199,7 @@ body {
     background-position: center;
     position: absolute;
     z-index: 5;
+    max-height: 154px;
 }
 
 .splash {
@@ -359,14 +360,29 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: fit-content;
-    background: var(--color-blue);
+    height: 60px;
     z-index: 200;
-    font-size: 1.5rem;
-    color: #fff;
+    font-size: 1.5em;
+    color: #074989;
     text-align: center;
-    font-weight: 700;
-    padding: 11px 20px;
+    font-weight: 600;
+    background-image: url(image/score.svg);
+    background-size: 100% 60px;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 25px;
+    left: 0;
+    right: 0;
+    background-position-y: top;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-position: center;
+    width: fit-content;
+    padding: 0 40px;
+}
+
+.score_container.hide {
+    display: none;
 }
 
 .score_inner {
@@ -940,5 +956,26 @@ body {
 @media screen and (min-width: 1200px) {
     .line_block {
         background-size: 590px 300px;
+    }
+}
+
+
+@media screen and (min-width: 590px) {
+    .screen {
+        margin: auto;
+        max-height: 1200px;
+    }
+    .gamearea {
+        max-height: 1200px;
+    }
+    .splash {
+        width: 212px;
+    }
+    .splash.splash-after {
+        width: 300px;
+    }
+
+    .game .actions {
+        display: none !important;
     }
 }

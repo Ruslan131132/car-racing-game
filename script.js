@@ -20,7 +20,7 @@ const puddle = document.createElement('div');
 puddle.classList.add('puddle');
 puddle.y = -2500;
 puddle.style.top = '-2500px';
-puddle.style.left = (gameArea.offsetWidth * 101 / 590) + 'px';
+puddle.style.left = (screenStart.offsetWidth * 101 / 590) + 'px';
 
 //ВСПЛЕСК
 const splash = document.createElement('div');
@@ -57,9 +57,9 @@ let enemyStyles = [];
 
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyPositions = [
-    (gameArea.offsetWidth * 165 / 590) + 'px',
-    gameArea.offsetWidth * 0.5 + 'px',
-    (gameArea.offsetWidth * 425 / 590) + 'px',
+    (screenStart.offsetWidth * 165 / 590) + 'px',
+    screenStart.offsetWidth * 0.5 + 'px',
+    (screenStart.offsetWidth * 425 / 590) + 'px',
 ];
 const enemyOffsets = [-20, -10, 10, 20];
 const lineAvailablePositions = [];
@@ -115,13 +115,13 @@ diffBtn.forEach(item => {
             enemyStyles = [
                 {
                     name: 'enemy1',
-                    width: document.documentElement.clientWidth * 133 / 590 + 'px',
-                    height: document.documentElement.clientHeight * 49 / 1200 + 'px',
+                    width: screenStart.offsetWidth * 133 / 590 + 'px',
+                    height: screenStart.offsetHeight * 49 / 1200 + 'px',
                 },
                 {
                     name: 'enemy2',
-                    width: document.documentElement.clientWidth * 111 / 590 + 'px',
-                    height: document.documentElement.clientHeight * 50 / 1200 + 'px',
+                    width: screenStart.offsetWidth * 111 / 590 + 'px',
+                    height: screenStart.offsetHeight * 50 / 1200 + 'px',
                 }
             ];
             speedSum = settings.speed;
@@ -161,13 +161,13 @@ diffBtn.forEach(item => {
             enemyStyles = [
                 {
                     name: 'enemy1',
-                    width: document.documentElement.clientWidth * 89 / 590 + 'px',
-                    height: document.documentElement.clientHeight * 49 / 1200 + 'px',
+                    width: screenStart.offsetWidth * 89 / 590 + 'px',
+                    height: screenStart.offsetHeight * 49 / 1200 + 'px',
                 },
                 {
                     name: 'enemy2',
-                    width: document.documentElement.clientWidth * 30 / 590 + 'px',
-                    height: document.documentElement.clientHeight * 35 / 1200 + 'px',
+                    width: screenStart.offsetWidth * 30 / 590 + 'px',
+                    height: screenStart.offsetHeight * 35 / 1200 + 'px',
                 }
             ];
             generateGame()
@@ -184,8 +184,8 @@ backToMenuBtn.onclick = () => {
     screenGame.classList.add('screen_hide')
     screenStart.classList.remove('screen_hide');
     screenStart.classList.add('screen_show');
-    screenGame.classList.remove('screen-up')
-    screenGame.style.marginTop = null
+    // screenGame.classList.remove('screen-up')
+    // screenGame.style.marginTop = null
 }
 
 function generateGame() {
@@ -195,13 +195,11 @@ function generateGame() {
     screenResult.classList.add('screen_hide');
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
-    screenGame.classList.add('screen-up')
+    screenStart.classList.add('screen_hide');
+    // screenGame.classList.add('screen-up')
+    screenGame.classList.add('screen_show')
     actionsBtns.style.display = 'flex';
-    // trustScroll.style.display = 'block'
-    // setTimeout(() => {
-    //     actionsBtns.style.display = 'none';
-    // }, 3000);
-
+    score.classList.remove('hide');
 
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
@@ -372,10 +370,10 @@ function playGame() {
         moveBackEnemy();
         movePuddle();
         if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
-            settings.x -= settings.speed;
+            settings.x -= 0.8 * settings.speed;
         }
         if (keys.ArrowRight && settings.x < gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-            settings.x += settings.speed;
+            settings.x += 0.8 * settings.speed;
         }
         if (keys.ArrowUp && settings.y > 0) {
             settings.y -= settings.speed;
@@ -435,11 +433,11 @@ function moveEnemy() {
 
             //ПОЗИЦИЯ ПО X
             if (carRect.right - enemyRect.left < 15) {
-                boom.style.left = enemyRect.left - 25 + 'px'
+                boom.style.left = 'calc(' + item.style.left  + ' - 25px)'
             } else if (enemyRect.right - carRect.left < 15) {
-                boom.style.left = carRect.left - 25 + 'px'
+                boom.style.left = 'calc(' + car.style.left  + ' - 25px)'
             } else {
-                boom.style.left = carRect.left + ((carRect.right - carRect.left) / 2) - 25 + 'px'
+                boom.style.left = 'calc(' + car.style.left + ' + 5px)'
             }
 
             //ПОЗИЦИЯ ПО Y
@@ -453,7 +451,7 @@ function moveEnemy() {
 
 
             setTimeout(() => {
-                // gameArea.innerHTML = '';
+                gameArea.innerHTML = '';
                 boomAudio.pause();
                 boomAudio.currentTime = 0;
                 screenResult.classList.remove('screen_hide');
@@ -461,7 +459,8 @@ function moveEnemy() {
                 screenGame.classList.add('screen_hide');
                 againBtn.classList.add(settings.mode);
                 screenGame.classList.remove('screen-up')
-                screenGame.style.marginTop = '0'
+                // screenGame.style.marginTop = '0'
+                score.classList.add('hide');
             }, 2000);
 
             gameArea.append(boom);
@@ -501,15 +500,16 @@ function moveBackEnemy() {
 
 function movePuddle() {
     let carRect = car.getBoundingClientRect();
+    let carXPos = car.style.left;
     let enemyRect = puddle.getBoundingClientRect();
     if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
         splashAudio.play()
         splash.classList.remove('hide');
-        splash.style.left = carRect.left - (gameArea.offsetWidth * 212 / 590 / 2) + 25 + 'px'
+        splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 212 / 590 / 2) - 25) + 'px)'
         splash.style.top = carRect.top + 'px';
         setTimeout(() => {
             splash.classList.add('splash-after');
-            splash.style.left = carRect.left - (gameArea.offsetWidth * 300 / 590 / 2) + 25 + 'px'
+            splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 300 / 590 / 2) - 25) + 'px)'
             splash.style.top = carRect.top + 'px';
             setTimeout(() => {
                 splash.classList.remove('splash-after');
@@ -548,7 +548,7 @@ leaderBtn.onclick = () => {
                     <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/user.jpg'}">
                     <span class="user-mode">${item.mode}</span>
                 </div>
-                <span class="user-name">${item.tg}</span>
+                <span class="user-name">${item.tg ? item.tg : item.name}</span>
                 <span class="user-points">${item.count}</span>
             </div>`
             }).join('');
@@ -600,21 +600,25 @@ gameArea.addEventListener('touchend', function () {
 
 
 leftBtn.addEventListener('touchstart', function (e) {
+    e.preventDefault()
     keys.ArrowLeft = true;
     leftBtn.classList.add('active')
 });
 
 leftBtn.addEventListener('touchend', function (e) {
+    e.preventDefault()
     keys.ArrowLeft = false;
     leftBtn.classList.remove('active')
 });
 
 rightBtn.addEventListener('touchstart', function (e) {
+    e.preventDefault()
     keys.ArrowRight = true;
     rightBtn.classList.add('active')
 });
 
 rightBtn.addEventListener('touchend', function (e) {
+    e.preventDefault()
     keys.ArrowRight = false;
     rightBtn.classList.remove('active')
 });
