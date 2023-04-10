@@ -1,12 +1,10 @@
 const score = document.querySelector('.score_container'),
-    startBtn = document.querySelector('.game__start'),
     game = document.querySelector('.game'),
     car = document.createElement('div'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
     againBtn = document.querySelector('.play_again'),
     backToMenuBtn = document.querySelector('.change-mode-button'),
     leaderBtn = document.querySelector('.leader-button'),
-    screens = document.querySelectorAll('.screen'),
     screenGame = document.querySelector('.screen_game'),
     screenStart = document.querySelector('.screen_start'),
     screenResult = document.querySelector('.screen_result'),
@@ -26,8 +24,9 @@ let posInit = 0,
 
 
 let lines,//блоки заднего фона
-    enemies; //препятствия
-let gameArea;
+    enemies, //препятствия
+    gameArea,//игровое поле
+    trustScroll;
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyOffsets = [-20, -10, 10, 20];
 const lineAvailablePositions = [];
@@ -87,10 +86,6 @@ const keys = {
     ArrowRight: false,
 };
 
-function getQuantityElements(heightElement) {
-    return document.documentElement.clientHeight / heightElement + 1;
-}
-
 function random(num) {
     return Math.floor(Math.random() * num);
 }
@@ -132,6 +127,14 @@ function generateGame() {
     game.appendChild(gameArea);
     car.style.left = 'calc(50% - 25px)';
     car.style.bottom = '170px';
+
+    trustScroll = document.createElement('div');
+    trustScroll.classList.add('trust-scroll__image')
+    trustScroll.style.display = 'block'
+    setTimeout(() => {
+        trustScroll.style.display = 'none'
+    }, 3000);
+    game.appendChild(trustScroll)
 
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
@@ -398,9 +401,9 @@ function movePuddle() {
     let enemyRect = puddle.getBoundingClientRect();
     if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
         splashAudio.play()
-        splash.classList.remove('hide');
         splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 212 / 590 / 2) - 25) + 'px)'
         splash.style.top = carRect.top + 'px';
+        splash.classList.remove('hide');
         setTimeout(() => {
             splash.classList.add('splash-after');
             splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 300 / 590 / 2) - 25) + 'px)'
@@ -438,7 +441,7 @@ leaderBtn.onclick = () => {
             modalBody.innerHTML = response.data.map(item => {
                 return `<div class="user-item">
                 <div class="user-info">
-                    <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/user.jpg'}">
+                    <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/icons/user.jpg'}">
                     <span class="user-mode">${item.mode}</span>
                 </div>
                 <span class="user-name">${item.tg ? item.tg : item.name}</span>
