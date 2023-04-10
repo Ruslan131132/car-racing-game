@@ -365,7 +365,7 @@ function playGame() {
             puddleSpeedSum += puddleSpeedSumInc
         }
         // score.innerHTML = settings.score;
-        moveRoad();
+        // moveRoad();
         moveEnemy();
         moveBackEnemy();
         movePuddle();
