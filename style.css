@@ -100,8 +100,6 @@ button {
     height: 100vh;
     position: relative;
     margin: auto;
-    background: rgb(143, 143, 143);
-    /*overflow: hidden;*/
     width: calc(390 / 590 * 100%);
     max-width: 390px;
 }
