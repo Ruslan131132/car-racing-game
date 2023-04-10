@@ -25,8 +25,9 @@ let posInit = 0,
 
 
 let lines,//блоки заднего фона
-    enemies; //препятствия
-let gameArea;
+    enemies, //препятствия
+    gameArea,
+    trustScroll;
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
 const enemyOffsets = [-20, -10, 10, 20];
 const lineAvailablePositions = [];
@@ -123,14 +124,21 @@ function generateGame() {
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen-show')
     screenStart.classList.add('screen_hide')
-    screenResult.classList.add('screen_hide')
-    screenResult.classList.remove('screen-show')
+    // screenResult.classList.add('screen_hide')
+    // screenResult.classList.remove('screen-show')
     score.classList.remove('hide');
     gameArea = document.createElement('div');
     gameArea.classList.add('gamearea');
     game.appendChild(gameArea);
     car.style.left = 'calc(50% - 25px)';
     car.style.bottom = '170px';
+    trustScroll = document.createElement('div');
+    trustScroll.classList.add('trust-scroll__image')
+    trustScroll.style.display = 'block'
+    setTimeout(() => {
+        trustScroll.style.display = 'none'
+    }, 3000);
+    game.appendChild(trustScroll)
 
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
@@ -145,7 +153,7 @@ function generateGame() {
 
 
     // ГЕНЕРАЦИЯ ПРЕПЯТСТВИЙ
-    for (let i = 0; i < 16; i++) {//lines
+    for (let i = 0; i < 8; i++) {//lines
         let y = -500 * (i + 1);
 
         let countCars = i % 3 == 0 ? 2 : 1; // количество машин на одной полосе
@@ -232,13 +240,9 @@ let swipeEnd = function() {
 
 
 let swipeAction = function() {
-
     let evt = getEvent();
-
     posX2 = posX1 - evt.clientX;
     posX1 = evt.clientX;
-
-
     posY2 = posY1 - evt.clientY;
     posY1 = evt.clientY;
 
@@ -309,6 +313,7 @@ function moveRoad() {
         }
     });
 }
+
 function moveEnemy() {
     enemies.forEach(function (item) {
         let carRect = car.getBoundingClientRect();
@@ -347,7 +352,7 @@ function moveEnemy() {
             }
 
             settings.speed = 6
-            pointsValue.innerHTML = settings.score;
+            // pointsValue.innerHTML = settings.score;
             speedSum = settings.mode == 'gravity' ? settings.speed / 2 : settings.speed
             puddleSpeedSum = settings.speed;
 
@@ -357,13 +362,13 @@ function moveEnemy() {
             });
 
             setTimeout(() => {
-                game.innerHTML = '';
+                // game.innerHTML = '';
                 boomAudio.pause();
                 boomAudio.currentTime = 0;
-                screenResult.classList.remove('screen_hide');
+                // screenResult.classList.remove('screen_hide');
                 screenStart.classList.add('screen_hide');
-                screenGame.classList.add('screen_hide');
-                againBtn.classList.add(settings.mode);
+                // screenGame.classList.add('screen_hide');
+                // againBtn.classList.add(settings.mode);
                 screenGame.classList.remove('screen-up')
                 score.classList.add('hide');
             }, 2000);
@@ -371,7 +376,7 @@ function moveEnemy() {
         item.y += speedSum;
         item.style.top = item.y + 'px';
         if (item.y >= document.documentElement.clientHeight) {
-            item.y = -8000 + document.documentElement.clientHeight;
+            item.y = -4000 + document.documentElement.clientHeight;
             let carPos =  lineAvailablePositions[item.dataset.line][0];
             item.style.left = gameArea.offsetWidth * carPos - (item.offsetWidth / 2) + 'px'
             lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
@@ -406,37 +411,36 @@ function movePuddle() {
     }
 }
 
-leaderBtn.onclick = () => {
-    document.querySelector('.modal-overlay').classList.add('--show')
-    let modalBody = document.querySelector('.modal-body');
-    modalBody.innerHTML = ''
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://cordiant.4k-pr.com/api/getTopUsers', true);
-
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-    xhr.send();
-
-    xhr.onload = function () {
-        if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
-            console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
-        } else { // если всё прошло гладко, выводим результат
-            console.log(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
-            let response = JSON.parse(xhr.response);
-            modalBody.innerHTML = response.data.map(item => {
-                return `<div class="user-item">
-                <div class="user-info">
-                    <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/user.jpg'}">
-                    <span class="user-mode">${item.mode}</span>
-                </div>
-                <span class="user-name">${item.tg ? item.tg : item.name}</span>
-                <span class="user-points">${item.count}</span>
-            </div>`
-            }).join('');
-        }
-    };
-
-}
+// leaderBtn.onclick = () => {
+//     document.querySelector('.modal-overlay').classList.add('--show')
+//     let modalBody = document.querySelector('.modal-body');
+//     modalBody.innerHTML = ''
+//     let xhr = new XMLHttpRequest();
+//     xhr.open('GET', 'http://cordiant.4k-pr.com/api/getTopUsers', true);
+//
+//     xhr.setRequestHeader("Accept", "application/json");
+//     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+//     xhr.send();
+//
+//     xhr.onload = function () {
+//         if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
+//             console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`); // Например, 404: Not Found
+//         } else { // если всё прошло гладко, выводим результат
+//             console.log(`Готово, получили ${xhr.response.length} байт`); // response -- это ответ сервера
+//             let response = JSON.parse(xhr.response);
+//             modalBody.innerHTML = response.data.map(item => {
+//                 return `<div class="user-item">
+//                 <div class="user-info">
+//                     <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/user.jpg'}">
+//                     <span class="user-mode">${item.mode}</span>
+//                 </div>
+//                 <span class="user-name">${item.tg ? item.tg : item.name}</span>
+//                 <span class="user-points">${item.count}</span>
+//             </div>`
+//             }).join('');
+//         }
+//     };
+// }
 
 function savePoints(data) {
     const urlParams = new URLSearchParams(window.location.search);
