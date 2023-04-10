@@ -372,7 +372,7 @@ function moveEnemy() {
             });
 
             setTimeout(() => {
-                game.innerHTML = '';
+                // game.innerHTML = '';
                 boomAudio.pause();
                 boomAudio.currentTime = 0;
                 screenResult.classList.remove('screen_hide');

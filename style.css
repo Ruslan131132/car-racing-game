@@ -113,7 +113,7 @@ button {
     /*width: 100%;*/
     background-size: 100% 300px;
     background-repeat: no-repeat;
-    padding: 0 calc(100vw * 100 / 590);
+    /*padding: 0 calc(100vw * 100 / 590);*/
     max-width: 590px;
     z-index: 1;
 }
@@ -372,7 +372,7 @@ button {
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 10px;
-    height: 340px;
+    height: 50vh;;
 }
 
 .modal-promo {
@@ -709,5 +709,28 @@ button {
     .management-button {
         font-size: 11px;
         padding: 15px 20px;
+    }
+}
+
+@media (min-width: 590px) {
+    .screen {
+        margin: auto;
+        max-height: 1200px;
+    }
+    .gamearea {
+        max-height: 1200px;
+        width: 390px;
+    }
+    .game {
+        position: relative;
+        overflow: hidden;
+    }
+    .line_block {
+        width: 590px;
+        background-size: 590px 300px;
+    }
+    .modal {
+        width: 590px;
+        margin: auto;
     }
 }
