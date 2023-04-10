@@ -978,4 +978,9 @@ body {
     .game .actions {
         display: none !important;
     }
+
+    .modal {
+        max-width: 590px;
+        margin: auto;
+    }
 }

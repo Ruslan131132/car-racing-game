@@ -199,7 +199,7 @@ function generateGame() {
     // screenGame.classList.add('screen-up')
     screenGame.classList.add('screen_show')
     actionsBtns.style.display = 'flex';
-    score.classList.remove('hide');
+    // score.classList.remove('hide');
 
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
@@ -364,7 +364,7 @@ function playGame() {
             speedSum += speedSumInc
             puddleSpeedSum += puddleSpeedSumInc
         }
-        score.innerHTML = settings.score;
+        // score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
         moveBackEnemy();
