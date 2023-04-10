@@ -4,6 +4,7 @@ const score = document.querySelector('.score_container'),
     car = document.createElement('div'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
     againBtn = document.querySelector('.play_again'),
+    backToMenuBtn = document.querySelector('.change-mode-button'),
     leaderBtn = document.querySelector('.leader-button'),
     screens = document.querySelectorAll('.screen'),
     screenGame = document.querySelector('.screen_game'),
@@ -202,6 +203,17 @@ function generateGame() {
     audio.autoplay = true;
     audio.play();
     requestAnimationFrame(playGame);
+}
+
+againBtn.onclick = () => {
+    generateGame()
+}
+
+backToMenuBtn.onclick = () => {
+    screenResult.classList.add('screen_hide');
+    screenGame.classList.add('screen_hide')
+    screenStart.classList.remove('screen_hide');
+    screenStart.classList.add('screen_show');
 }
 
 let getEvent = function () {
