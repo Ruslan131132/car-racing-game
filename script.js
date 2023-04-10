@@ -1,5 +1,7 @@
 const score = document.querySelector('.score_container'),
-    gameArea = document.querySelector('.gamearea'),
+    // gameArea = document.querySelector('.gamearea'),
+    startMenu = document.querySelector('.start__menu'),
+    game = document.querySelector('.game'),
     car = document.createElement('div'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
     againBtn = document.querySelector('.play_again'),
@@ -20,7 +22,6 @@ const puddle = document.createElement('div');
 puddle.classList.add('puddle');
 puddle.y = -2500;
 puddle.style.top = '-2500px';
-puddle.style.left = (screenStart.offsetWidth * 101 / 590) + 'px';
 
 //ВСПЛЕСК
 const splash = document.createElement('div');
@@ -36,10 +37,6 @@ enemyBack.y = -2000
 enemyBack.style.top = '-2000px';
 enemyBack.style.left = '-30px'
 
-
-let lines,//блоки заднего фона
-    enemies; //препятствия
-
 let allowSwipe = true;
 
 let posInit = 0,
@@ -52,17 +49,18 @@ let posInit = 0,
     isScroll = false,
     activeEnemiesLines = [];
 
-// const enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5'];
-let enemyStyles = [];
-
+let lines,//блоки заднего фона
+    enemies, //препятствия
+    gameArea; // игровое поле
 const lineStyles = ['img_1', 'img_2', 'img_3', 'img_4'];
-const enemyPositions = [
-    (screenStart.offsetWidth * 165 / 590) + 'px',
-    screenStart.offsetWidth * 0.5 + 'px',
-    (screenStart.offsetWidth * 425 / 590) + 'px',
-];
 const enemyOffsets = [-20, -10, 10, 20];
 const lineAvailablePositions = [];
+let enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
+const enemyPositions = [
+    (65 / 390),
+    0.5,
+    (330 / 390),
+];
 
 car.classList.add('car');
 
@@ -100,10 +98,6 @@ let speedSumInc = 1
 let puddleSpeedSum = settings.speed
 let puddleSpeedSumInc = 1
 
-// function getQuantityElements(heightElement) {
-//     return document.documentElement.clientHeight / heightElement + 1;
-// }
-
 function random(num) {
     return Math.floor(Math.random() * num);
 }
@@ -112,45 +106,13 @@ diffBtn.forEach(item => {
     item.onclick = () => {
         if (item.classList.contains('offroad')) {
             settings.mode = 'offroad'
-            enemyStyles = [
-                {
-                    name: 'enemy1',
-                    width: screenStart.offsetWidth * 133 / 590 + 'px',
-                    height: screenStart.offsetHeight * 49 / 1200 + 'px',
-                },
-                {
-                    name: 'enemy2',
-                    width: screenStart.offsetWidth * 111 / 590 + 'px',
-                    height: screenStart.offsetHeight * 50 / 1200 + 'px',
-                }
-            ];
+            enemyStyles = ['enemy1', 'enemy2'];
             speedSum = settings.speed;
             speedSumInc = 1
             generateGame()
         } else if (item.classList.contains('gravity')) {
             settings.mode = 'gravity'
-            enemyStyles = [
-                {
-                    name: 'enemy1',
-                    width: '67px',
-                    height: '223px',
-                },
-                {
-                    name: 'enemy2',
-                    width: '46.87px',
-                    height: '98px',
-                },
-                {
-                    name: 'enemy3',
-                    width: '64.97px',
-                    height: '125px',
-                },
-                {
-                    name: 'enemy4',
-                    width: '51px',
-                    height: '96.98px',
-                },
-            ];
+            enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
             speedSum = settings.speed / 2;
             speedSumInc = 0.5
             generateGame()
@@ -158,18 +120,7 @@ diffBtn.forEach(item => {
             settings.mode = 'comfort'
             speedSum = settings.speed;
             speedSumInc = 1
-            enemyStyles = [
-                {
-                    name: 'enemy1',
-                    width: screenStart.offsetWidth * 89 / 590 + 'px',
-                    height: screenStart.offsetHeight * 49 / 1200 + 'px',
-                },
-                {
-                    name: 'enemy2',
-                    width: screenStart.offsetWidth * 30 / 590 + 'px',
-                    height: screenStart.offsetHeight * 35 / 1200 + 'px',
-                }
-            ];
+            enemyStyles = ['enemy1', 'enemy2'];
             generateGame()
         }
     };
@@ -189,17 +140,23 @@ backToMenuBtn.onclick = () => {
 }
 
 function generateGame() {
-    gameArea.innerHTML = '';
+    game.innerHTML = '';
     car.style.left = 'calc(50% - 25px)';
-    car.style.bottom = '170px';
-    screenResult.classList.add('screen_hide');
+    car.style.bottom = '75px';
+    // screenGame.classList.add('screen-up')
     screenGame.classList.remove('screen_hide')
+    screenGame.classList.add('screen_show')
     screenStart.classList.remove('screen_show');
     screenStart.classList.add('screen_hide');
-    // screenGame.classList.add('screen-up')
-    screenGame.classList.add('screen_show')
-    actionsBtns.style.display = 'flex';
-    // score.classList.remove('hide');
+    screenResult.classList.add('screen_hide');
+    score.classList.remove('hide');
+    gameArea = document.createElement('div');
+    gameArea.classList.add('gamearea');
+    game.appendChild(gameArea);
+    trustScroll.style.display = 'block'
+    setTimeout(() => {
+        trustScroll.style.display = 'none'
+    }, 3000);
 
     // ГЕНЕРАЦИЯ ПОЛЯ
     for (let j = 0; j < 5; j++) {
@@ -208,16 +165,17 @@ function generateGame() {
         line_block.style.bottom = (j) * 298 + 'px';
         line_block.y = ((j) * 298);
         line_block.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
-        gameArea.appendChild(line_block);
+        game.appendChild(line_block);
     }
+    lines = document.querySelectorAll('.line_block');
+
 
     // ГЕНЕРАЦИЯ ПРЕПЯТСТВИЙ
-    for (let i = 0; i < 4; i++) {//lines
+    for (let i = 0; i < 16; i++) {//lines
         let y = -500 * (i + 1);
 
-        let countCars = i % 2 == 0 ? 1 : 2; // количество машин на одной полосе
+        let countCars = i % 3 == 0 ? 2 : 1; // количество машин на одной полосе
         let enemyOffsetsArray = JSON.parse(JSON.stringify(enemyOffsets));
-        activeEnemiesLines[i] = []
         lineAvailablePositions[i] = [...enemyPositions];
 
         for (let j = 0; j < countCars; j++) {//lines
@@ -230,39 +188,45 @@ function generateGame() {
 
             const enemy = document.createElement('div');
             enemy.classList.add('enemy');
+            enemy.classList.add(settings.mode);
             enemy.dataset.line = i;
             enemy.dataset.pos = carPos;
             enemy.dataset.offset = enemyOffset;
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-            enemy.style.background =
-                'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-            enemy.style.width = chosen_enemy.width
-            enemy.style.height = chosen_enemy.height
+            enemy.classList.add(chosen_enemy);
+            enemy.dataset.current = chosen_enemy;
+            // chosen_enemy.name = 'enemy1.png';
+            // enemy.style.background =
+            //     'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
+            // enemy.style.background =
+            //     'rgba(0, 0, 0, 0) url(image/' + chosen_enemy + '.png) center / cover no-repeat';
+            // enemy.style.width = chosen_enemy.width
+            // enemy.style.height = chosen_enemy.height
             enemy.y = y + enemyOffset
             enemy.style.top = enemy.y + 'px';
-            enemy.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
-            gameArea.append(enemy);
             gameArea.appendChild(enemy);
+            enemy.style.left = gameArea.offsetWidth * carPos - (enemy.clientWidth / 2) + 'px'
         }
     }
-
-    lines = document.querySelectorAll('.line_block');
     enemies = document.querySelectorAll('.enemy');
+
+    //Background лужи
     puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
     gameArea.appendChild(puddle);
     gameArea.appendChild(splash);
 
+
     //Машина на другой полосе
 
-    if (settings.mode == 'gravity') {
-        let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-        enemyBack.style.background =
-            'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-        enemyBack.style.width = chosen_enemy.width
-        enemyBack.style.height = chosen_enemy.height
-        enemyBack.style.display = 'block'
-        gameArea.appendChild(enemyBack);
-    }
+    // if (settings.mode == 'gravity') {
+    //     let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+    //     enemyBack.style.background =
+    //         'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
+    //     enemyBack.style.width = chosen_enemy.width
+    //     enemyBack.style.height = chosen_enemy.height
+    //     enemyBack.style.display = 'block'
+    //     gameArea.appendChild(enemyBack);
+    // }
 
     settings.score = 0;
     settings.start = true;
@@ -293,60 +257,31 @@ let swipeStart = function () {
 
 let swipeEnd = function () {
     posFinal = posInit - posX1;
-
     isScroll = false;
     isSwipe = false;
-
     document.removeEventListener('touchmove', swipeAction);
     document.removeEventListener('touchend', swipeEnd);
-
     keys.ArrowRight = false
     keys.ArrowLeft = false
 }
 
 
 let swipeAction = function () {
-
     let evt = getEvent();
-
     posX2 = posX1 - evt.clientX;
     posX1 = evt.clientX;
-
-    //РАБОЧАЯ ВЕРСИЯ
+    posY2 = posY1 - evt.clientY;
+    posY1 = evt.clientY;
     keys.ArrowRight = false
     keys.ArrowLeft = false
-    settings.x = Math.ceil(posX1) - 25
-    if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-        settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
+    settings.x = Math.ceil(posX1) - (100 / 590 * gameArea.offsetWidth) - 50
+    if (settings.x > gameArea.offsetWidth - car.offsetWidth) {
+        settings.x = gameArea.offsetWidth - car.offsetWidth
     }
-    if (settings.x < 0 + (gameArea.offsetWidth * 100 / 590)) {
-        settings.x = 0 + (gameArea.offsetWidth * 100 / 590)
+    if (settings.x < 0) {
+        settings.x = 0
     }
     return
-
-
-    // НОВАЯ ВЕРСИЯ
-    // if (posX1 == settings.x || Math.abs(posX1 - settings.x) < 50) {
-    //     settings.x = Math.ceil(posX1) - 25
-    //     if (settings.x > gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)) {
-    //         settings.x = gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590)
-    //     }
-    //     if (settings.x < (gameArea.offsetWidth * 100 / 590)) {
-    //         settings.x = (gameArea.offsetWidth * 100 / 590)
-    //     }
-    //     return
-    // }
-    //
-    //
-    // if (posX1 - posInit > 0) {
-    //     if (settings.x < gameArea.offsetWidth - car.offsetWidth - (gameArea.offsetWidth * 100 / 590) - 25) {
-    //         settings.x += settings.speed;
-    //     }
-    // } else if (posX1 - posInit < 0) {
-    //     if (settings.x > (gameArea.offsetWidth * 100 / 590) + 25) {
-    //         settings.x -= settings.speed;
-    //     }
-    // }
 }
 
 function startGame(event) {
@@ -364,10 +299,10 @@ function playGame() {
             speedSum += speedSumInc
             puddleSpeedSum += puddleSpeedSumInc
         }
-        // score.innerHTML = settings.score;
-        // moveRoad();
+        score.innerHTML = settings.score;
+        moveRoad();
         moveEnemy();
-        moveBackEnemy();
+        // moveBackEnemy();
         movePuddle();
         if (keys.ArrowLeft && settings.x > (gameArea.offsetWidth * 100 / 590)) {
             settings.x -= 0.8 * settings.speed;
@@ -384,7 +319,6 @@ function playGame() {
         car.style.top = settings.y + 'px';
         car.style.left = settings.x + 'px';
         requestAnimationFrame(playGame);
-        // setTimeout(playGame, 1000 / 120)
     }
 }
 
@@ -433,9 +367,9 @@ function moveEnemy() {
 
             //ПОЗИЦИЯ ПО X
             if (carRect.right - enemyRect.left < 15) {
-                boom.style.left = 'calc(' + item.style.left  + ' - 25px)'
+                boom.style.left = 'calc(' + item.style.left + ' - 25px)'
             } else if (enemyRect.right - carRect.left < 15) {
-                boom.style.left = 'calc(' + car.style.left  + ' - 25px)'
+                boom.style.left = 'calc(' + car.style.left + ' - 25px)'
             } else {
                 boom.style.left = 'calc(' + car.style.left + ' + 5px)'
             }
@@ -468,17 +402,11 @@ function moveEnemy() {
         item.y += speedSum;
         item.style.top = item.y + 'px';
         if (item.y >= document.documentElement.clientHeight) {
-            item.y = -2000 + document.documentElement.clientHeight;
+            item.y = -8000 + document.documentElement.clientHeight;
             let carPos = lineAvailablePositions[item.dataset.line][0];
-            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-            item.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
+            item.style.left = gameArea.offsetWidth * carPos - (item.offsetWidth / 2) + 'px'
             lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
             item.dataset.pos = carPos;
-
-            item.style.background =
-                'rgba(0, 0, 0, 0) url(./image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-            item.style.width = chosen_enemy.width
-            item.style.height = chosen_enemy.height
         }
     });
 }
@@ -505,11 +433,11 @@ function movePuddle() {
     if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
         splashAudio.play()
         splash.classList.remove('hide');
-        splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 212 / 590 / 2) - 25) + 'px)'
+        splash.style.left = 'calc(' + carXPos + ' - ' + ((gameArea.offsetWidth * 212 / 590 / 2) - 25) + 'px)'
         splash.style.top = carRect.top + 'px';
         setTimeout(() => {
             splash.classList.add('splash-after');
-            splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 300 / 590 / 2) - 25) + 'px)'
+            splash.style.left = 'calc(' + carXPos + ' - ' + ((gameArea.offsetWidth * 300 / 590 / 2) - 25) + 'px)'
             splash.style.top = carRect.top + 'px';
             setTimeout(() => {
                 splash.classList.remove('splash-after');
@@ -577,48 +505,4 @@ function savePoints(data) {
 }
 
 
-// document.addEventListener('touchstart', swipeStart);
-gameArea.addEventListener('touchstart', function (e) {
-    e.preventDefault();
-    let divWidth = gameArea.clientWidth;
-    let clickX = e.touches[0].clientX;
-    if (clickX > divWidth / 2) {
-        keys.ArrowRight = true;
-        rightBtn.classList.add('active')
-    } else {
-        keys.ArrowLeft = true;
-        leftBtn.classList.add('active')
-    }
-});
-
-gameArea.addEventListener('touchend', function () {
-    keys.ArrowRight = false;
-    keys.ArrowLeft = false;
-    rightBtn.classList.remove('active')
-    leftBtn.classList.remove('active')
-});
-
-
-leftBtn.addEventListener('touchstart', function (e) {
-    e.preventDefault()
-    keys.ArrowLeft = true;
-    leftBtn.classList.add('active')
-});
-
-leftBtn.addEventListener('touchend', function (e) {
-    e.preventDefault()
-    keys.ArrowLeft = false;
-    leftBtn.classList.remove('active')
-});
-
-rightBtn.addEventListener('touchstart', function (e) {
-    e.preventDefault()
-    keys.ArrowRight = true;
-    rightBtn.classList.add('active')
-});
-
-rightBtn.addEventListener('touchend', function (e) {
-    e.preventDefault()
-    keys.ArrowRight = false;
-    rightBtn.classList.remove('active')
-});
+document.addEventListener('touchstart', swipeStart);
