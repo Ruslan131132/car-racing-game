@@ -92,45 +92,32 @@ function random(num) {
 
 diffBtn.forEach(item => {
     item.addEventListener('click', () => {
-        if (item.classList.contains('easy')) {
-            // settings.speed = 5;
-            // settings.traffic = 3.5;
+        if (item.classList.contains('offroad')) {
             settings.mode = 'offroad'
             speedSum = settings.speed;
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
-            item.classList.add('active');
             enemyStyles = ['enemy1', 'enemy2'];
-        } else if (item.classList.contains('medium')) {
-            // settings.speed = 8;
-            // settings.traffic = 3;
+            generateGame()
+        } else if (item.classList.contains('gravity')) {
             settings.mode = 'gravity'
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
-            item.classList.add('active');
             speedSum = settings.speed / 2;
             enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
-        } else if (item.classList.contains('hard')) {
-            // settings.speed = 10;
-            // settings.traffic = 2.5;
+            generateGame()
+        } else if (item.classList.contains('comfort')) {
             settings.mode = 'comfort'
-            diffBtn.forEach(item => {
-                item.classList.remove('active');
-            });
             item.classList.add('active');
             speedSum = settings.speed / 2;
             enemyStyles = ['enemy1', 'enemy2'];
+            generateGame()
         }
     });
 });
 
-startBtn.addEventListener('click', () => {
+function generateGame() {
     startMenu.classList.add('hide');
+    document.querySelector('.screen_start').innerHTML = '';
     game.innerHTML = '';
     car.style.left = 'calc(50% - 25px)';
-    car.style.bottom = '75px';
+    car.style.bottom = '170px';
     screenGame.classList.add('screen-up')
     screenGame.classList.remove('screen_hide')
     screenStart.classList.remove('screen_show');
@@ -150,7 +137,6 @@ startBtn.addEventListener('click', () => {
         game.appendChild(line_block);
     }
     lines = document.querySelectorAll('.line_block');
-
 
     // ГЕНЕРАЦИЯ ПРЕПЯТСТВИЙ
     for (let i = 0; i < 16; i++) {//lines
@@ -177,13 +163,6 @@ startBtn.addEventListener('click', () => {
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
             enemy.classList.add(chosen_enemy);
             enemy.dataset.current = chosen_enemy;
-            // chosen_enemy.name = 'enemy1.png';
-            // enemy.style.background =
-            //     'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-            // enemy.style.background =
-            //     'rgba(0, 0, 0, 0) url(image/' + chosen_enemy + '.png) center / cover no-repeat';
-            // enemy.style.width = chosen_enemy.width
-            // enemy.style.height = chosen_enemy.height
             enemy.y = y + enemyOffset
             enemy.style.top = enemy.y + 'px';
             gameArea.appendChild(enemy);
@@ -196,20 +175,6 @@ startBtn.addEventListener('click', () => {
     puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
     gameArea.appendChild(puddle);
     gameArea.appendChild(splash);
-
-
-    //Машина на другой полосе
-
-    // if (settings.mode == 'gravity') {
-    //     let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-    //     enemyBack.style.background =
-    //         'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
-    //     enemyBack.style.width = chosen_enemy.width
-    //     enemyBack.style.height = chosen_enemy.height
-    //     enemyBack.style.display = 'block'
-    //     gameArea.appendChild(enemyBack);
-    // }
-
     settings.score = 0;
     settings.start = true;
     gameArea.appendChild(car);
@@ -218,7 +183,7 @@ startBtn.addEventListener('click', () => {
     audio.autoplay = true;
     audio.play();
     requestAnimationFrame(playGame);
-});
+}
 
 
 // sliderTrack.addEventListener('transitionend', () => allowSwipe = true);
@@ -340,10 +305,10 @@ function moveEnemy() {
         let carRect = car.getBoundingClientRect();
         let enemyRect = item.getBoundingClientRect();
         if (
-            carRect.top <= enemyRect.bottom &&
-            carRect.right >= enemyRect.left &&
-            carRect.left <= enemyRect.right &&
-            carRect.bottom >= enemyRect.top
+            carRect.top <= enemyRect.bottom - 2 &&
+            carRect.right >= enemyRect.left - 2 &&
+            carRect.left <= enemyRect.right - 2 &&
+            carRect.bottom >= enemyRect.top - 2
         ) {
             settings.start = false;
 
@@ -362,22 +327,9 @@ function moveEnemy() {
         if (item.y >= document.documentElement.clientHeight) {
             item.y = -8000 + document.documentElement.clientHeight;
             let carPos =  lineAvailablePositions[item.dataset.line][0];
-            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-            // item.classList.remove(item.dataset.current)
-            // item.classList.add(chosen_enemy)
-
-            // item.style.left = 'calc(' + carPos + ' - ' + chosen_enemy.width + '/ 2)'
-            // console.log(gameArea.offsetWidth)
-            // console.log(lineAvailablePositions[item.dataset.line][0])
             item.style.left = gameArea.offsetWidth * carPos - (item.offsetWidth / 2) + 'px'
             lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
             item.dataset.pos = carPos;
-
-
-            // item.style.background =
-            //     'rgba(0, 0, 0, 0) url(./image/' + chosen_enemy.name + '.png) center / cover no-repeat';
-            // item.style.width = chosen_enemy.width
-            // item.style.height = chosen_enemy.height
         }
     });
 }
