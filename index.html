@@ -1,35 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <title>Racing game</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="screen screen_start screen_show">
-      <div class="start__menu slideDown">
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="screen screen_start screen_show">
+    <div class="start__menu-logo">
+        <img class="logo" src="image/logo.svg">
+        <img class="sub-logo" src="image/sub_logo.svg">
+        <img class="poster" src="image/poster.svg">
+    </div>
+    <div class="start__menu slideDown">
         <div class="start__menu-container">
-          <div class="difficulty">
-            <p class="difficulty__title" style="margin-bottom: 10px">Выберите уровень сложности</p>
-            <button class="difficulty__button easy">Offroad</button>
-            <button class="difficulty__button medium active">Gravity</button>
-            <button class="difficulty__button hard">Comfort</button>
-          </div>
-
-          <button class="game__start">Test</button>
+            <div class="difficulty">
+                <img class="difficulty__button offroad" src="image/mode/offroad.png">
+                <img class="difficulty__button gravity active" src="image/mode/gravity.png">
+                <img class="difficulty__button comfort" src="image/mode/comfort.png">
+            </div>
         </div>
-        <!-- /.start__menu-container -->
-      </div>
     </div>
-    <div class="screen screen_game">
-      <div class="score_container hide"></div>
-      <div class="game">
+</div>
+<div class="screen screen_game screen_hide">
+    <div class="score_container hide"></div>
+    <div class="game">
         <div class="gamearea"></div>
-      </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+</div>
+<div class="screen screen_result screen_hide">
+    <div class="start__menu-logo">
+        <img class="logo" src="image/logo.svg">
+        <img class="sub-logo" src="image/sub_logo.svg">
+    </div>
+    <div class="points-block">
+        <img class="points-background" src="image/icons/points.svg">
+        <span class="points-value">1300</span>
+        <button class="play_again">
+        </button>
+    </div>
+    <div class="media-container">
+        <button class="leader-button">
+            <img class="icon" src="image/icons/leader.svg">
+            <img class="text" src="image/icons/leader-table-text.svg">
+        </button>
+        <button class="change-mode-button">
+            <img class="icon" src="image/icons/wheel.svg">
+            <img class="text" src="image/icons/change-mode-text.svg">
+        </button>
+        <a href="#" class="management-button">
+            <img class="icon" src="image/icons/tg.svg">
+            <span>Следить за акциями<br>на шины в Telegram</span>
+        </a>
+    </div>
+</div>
+<div class="modal-overlay" role="dialog">
+    <div class="modal" aria-modal="true" aria-labelledby="modal-title" role="document">
+        <div class="modal-header">
+            <span class="modal-close"
+                  onclick="this.parentElement.parentElement.parentElement.classList.remove('--show')">
+            </span>
+            <a href="#" class="management-button">
+                Следить за акциями<br>на покрышки в Telegram
+            </a>
+        </div>
+        <div class="modal-promo">
+            <img src="image/leader-table.png" width="100%">
+        </div>
+        <div class="modal-body">
+            <div class="user-item">
+                <div class="user-info">
+                    <img class="user-img" src="http://127.0.0.1:8000/storage/avatars/414983070.png">
+                    <span class="user-mode">ruskhas</span>
+                </div>
+
+                <span class="user-name">offroad</span>
+                <span class="user-points">12321321</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
 </html>
