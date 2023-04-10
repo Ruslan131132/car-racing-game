@@ -113,7 +113,6 @@ diffBtn.forEach(item => {
 });
 
 function generateGame() {
-    startMenu.classList.add('hide');
     game.innerHTML = '';
     screenGame.classList.add('screen-show')
     screenGame.classList.remove('screen_hide')
@@ -372,7 +371,7 @@ function moveEnemy() {
             });
 
             setTimeout(() => {
-                // game.innerHTML = '';
+                game.innerHTML = '';
                 boomAudio.pause();
                 boomAudio.currentTime = 0;
                 screenResult.classList.remove('screen_hide');
