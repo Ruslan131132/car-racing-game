@@ -95,17 +95,20 @@ diffBtn.forEach(item => {
         if (item.classList.contains('offroad')) {
             settings.mode = 'offroad'
             speedSum = settings.speed;
+            speedSumInc = 1
             enemyStyles = ['enemy1', 'enemy2'];
             generateGame()
         } else if (item.classList.contains('gravity')) {
             settings.mode = 'gravity'
             speedSum = settings.speed / 2;
+            speedSumInc = 0.5
             enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
             generateGame()
         } else if (item.classList.contains('comfort')) {
             settings.mode = 'comfort'
             item.classList.add('active');
-            speedSum = settings.speed / 2;
+            speedSum = settings.speed;
+            speedSumInc = 1
             enemyStyles = ['enemy1', 'enemy2'];
             generateGame()
         }
