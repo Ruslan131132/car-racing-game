@@ -129,6 +129,7 @@ function generateGame() {
     game.appendChild(gameArea);
     car.style.left = 'calc(50% - 25px)';
     car.style.bottom = '170px';
+    car.classList.add(settings.mode)
 
     trustScroll = document.createElement('div');
     trustScroll.classList.add('trust-scroll__image')
@@ -183,10 +184,11 @@ function generateGame() {
     enemies = document.querySelectorAll('.enemy');
 
     //Background лужи
-    puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
-    gameArea.appendChild(puddle);
-    gameArea.appendChild(splash);
-
+    if (settings.mode == 'offroad') {
+        puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
+        gameArea.appendChild(puddle);
+        gameArea.appendChild(splash);
+    }
 
     //Машина на другой полосе
 
@@ -206,6 +208,7 @@ function generateGame() {
     settings.x = car.offsetLeft;
     settings.y = car.offsetTop;
     audio.autoplay = true;
+    audio.loop = true;
     audio.play();
     requestAnimationFrame(playGame);
 }
@@ -219,6 +222,7 @@ backToMenuBtn.onclick = () => {
     screenGame.classList.add('screen_hide')
     screenStart.classList.remove('screen_hide');
     screenStart.classList.add('screen_show');
+    car.classList.remove(settings.mode)
 }
 
 let getEvent = function () {
@@ -282,7 +286,9 @@ function playGame() {
         score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
-        movePuddle();
+        if (settings.mode == 'offroad') {
+            movePuddle();
+        }
 
         let checkScore = settings.score % 5000
 
