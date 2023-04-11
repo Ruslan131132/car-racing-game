@@ -35,20 +35,20 @@ button {
 }
 
 .car.gravity {
-    width: calc(100% * 70 / 390);
-    height: calc(100% * 125 / 1200);
+    width: 60px;
+    height: 107px;
     background: rgba(0, 0, 0, 0) url(image/gravity/player.svg) center / cover no-repeat;
 }
 
 .car.comfort {
-    width: calc(100% * 70 / 390);
-    height: calc(100% * 137 / 1200);
+    width: 60px;
+    height: 117px;
     background: rgba(0, 0, 0, 0) url(image/comfort/player.svg) center / cover no-repeat;
 }
 
 .car.offroad {
-    width: calc(100% * 66 / 390);
-    height: calc(100% * 138 / 1200);
+    width: 60px;
+    height: 125px;
     background: rgba(0, 0, 0, 0) url(image/offroad/player.svg) center / cover no-repeat;
 }
 
@@ -563,9 +563,25 @@ button {
     .management-button .management-subtext{
         font-size: 15px;
     }
+
 }
 
 @media screen and (max-width: 500px) {
+    .car.gravity {
+        width: 50px;
+        height: 89px;
+    }
+
+    .car.comfort {
+        width: 50px;
+        height: 98px;
+    }
+
+    .car.offroad {
+        width: 50px;
+        height: 105px;
+    }
+
     .media-container {
         gap: 40px;
     }
