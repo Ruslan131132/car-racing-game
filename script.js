@@ -292,7 +292,7 @@ function playGame() {
 
         let checkScore = settings.score % 5000
 
-        if (settings.speed <= 12 && checkScore > 4996 || (checkScore >= 0 && checkScore < 4)) {
+        if (settings.speed <= 15 && checkScore > 4996 || (checkScore >= 0 && checkScore < 4)) {
             settings.speed += 1
             speedSum += speedSumInc
             puddleSpeedSum += puddleSpeedSumInc
