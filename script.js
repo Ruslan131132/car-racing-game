@@ -1,5 +1,6 @@
 const score = document.querySelector('.score_container'),
     game = document.querySelector('.game'),
+    cordiantHref = document.querySelector('.cordiant-href'),
     car = document.createElement('div'),
     diffBtn = document.querySelectorAll('.difficulty__button'),
     againBtn = document.querySelector('.play_again'),
@@ -56,10 +57,10 @@ car.classList.add('car');
 document.addEventListener('keydown', startGame);
 document.addEventListener('keyup', stopGame);
 
-const music = ['./audio/game-audio.wav', './audio/boom.wav', './audio/splash.wav'];
+const music = ['./audio/game-audio.wav', './audio/boom.mp3', './audio/splash.wav'];
 const audio = new Audio();
 audio.src = music[0];
-audio.volume = 0.1;
+audio.volume = 0.05;
 const boomAudio = new Audio();
 boomAudio.src = music[1];
 boomAudio.volume = 0.1;
@@ -97,6 +98,7 @@ diffBtn.forEach(item => {
             speedSum = settings.speed;
             speedSumInc = 1
             enemyStyles = ['enemy1', 'enemy2'];
+            cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39943/'
             generateGame()
         } else if (item.classList.contains('gravity')) {
             settings.mode = 'gravity'
@@ -104,12 +106,14 @@ diffBtn.forEach(item => {
             speedSumInc = 0.5
             enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
             generateGame()
+            cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39946/'
         } else if (item.classList.contains('comfort')) {
             settings.mode = 'comfort'
             item.classList.add('active');
             speedSum = settings.speed;
             speedSumInc = 1
             enemyStyles = ['enemy1', 'enemy2'];
+            cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39901/'
             generateGame()
         }
     });
@@ -174,6 +178,9 @@ function generateGame() {
             enemy.dataset.offset = enemyOffset;
             let chosen_enemy = enemyStyles[random(enemyStyles.length)]
             enemy.classList.add(chosen_enemy);
+            if (settings.mode == 'offroad' && chosen_enemy =='enemy2') {
+                enemy.classList.add('free');
+            }
             enemy.dataset.current = chosen_enemy;
             enemy.y = y + enemyOffset
             enemy.style.top = enemy.y + 'px';
@@ -337,6 +344,7 @@ function moveEnemy() {
         let carRect = car.getBoundingClientRect();
         let enemyRect = item.getBoundingClientRect();
         if (
+            !item.classList.contains('free') &&
             carRect.top <= enemyRect.bottom &&
             carRect.right >= enemyRect.left &&
             carRect.left <= enemyRect.right &&
@@ -347,27 +355,6 @@ function moveEnemy() {
             audio.pause();
             audio.currentTime = 0;
             audio.autoplay = false;
-            const boom = document.createElement('div');
-            boom.classList.add('boom');
-            gameArea.append(boom);
-
-            //ПОЗИЦИЯ ПО X
-            if (carRect.right - enemyRect.left < 15) {
-                boom.style.left = 'calc(' + item.style.left + ' - 25px)'
-            } else if (enemyRect.right - carRect.left < 15) {
-                boom.style.left = 'calc(' + car.style.left + ' - 25px)'
-            } else {
-                boom.style.left = 'calc(' + car.style.left + ' + 5px)'
-            }
-
-            //ПОЗИЦИЯ ПО Y
-            if (enemyRect.bottom - carRect.top < 10) {
-                boom.style.top = carRect.top - 25 + 'px';
-            } else if (carRect.bottom - enemyRect.top < 10) {
-                boom.style.top = enemyRect.top - 25 + 'px';
-            } else {
-                boom.style.top = enemyRect.top + 25 + 'px';
-            }
 
             settings.speed = 6
             pointsValue.innerHTML = settings.score;
