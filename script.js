@@ -57,7 +57,7 @@ car.classList.add('car');
 document.addEventListener('keydown', startGame);
 document.addEventListener('keyup', stopGame);
 
-const music = ['./audio/game-audio.wav', './audio/boom.mp3', './audio/splash.wav'];
+const music = ['./audio/game-audio.wav', './audio/boom.wav', './audio/splash.wav'];
 const audio = new Audio();
 audio.src = music[0];
 audio.volume = 0.05;
