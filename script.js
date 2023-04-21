@@ -147,9 +147,13 @@ function generateGame() {
     for (let j = 0; j < 5; j++) {
         const line_block = document.createElement('div');
         line_block.classList.add('line_block');
+        line_block.classList.add(settings.mode);
+        let img = lineStyles[random(lineStyles.length)]
+        line_block.classList.add(img);
+        line_block.dataset.img =img;
         line_block.style.bottom = (j) * 298 + 'px';
         line_block.y = ((j) * 298);
-        line_block.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
+        // line_block.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
         game.appendChild(line_block);
     }
     lines = document.querySelectorAll('.line_block');
@@ -334,8 +338,10 @@ function moveRoad() {
         line.style.bottom = line.y + 'px';
         if (line.y <= -298) {
             line.y = 1192 + line.y + 298;
-            line.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
-
+            let img = lineStyles[random(lineStyles.length)]
+            line.classList.remove(line.dataset.img);
+            line.classList.add(img);
+            line.dataset.img =img;
         }
     });
 }
