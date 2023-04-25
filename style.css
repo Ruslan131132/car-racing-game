@@ -439,6 +439,10 @@ button {
     align-items: center;
 }
 
+.modal-header .management-button {
+    background-color: #36a898;
+}
+
 .modal-close {
     height: 84px;
     width: 84px;
