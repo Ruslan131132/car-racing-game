@@ -67,7 +67,7 @@ button {
 .car.offroad {
     width: 60px;
     height: 125px;
-    background: rgba(0, 0, 0, 0) url(image/offroad/player.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/offroad/player.png) center / cover no-repeat;
 }
 
 .enemy.gravity.enemy1 {
