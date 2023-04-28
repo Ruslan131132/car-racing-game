@@ -378,7 +378,7 @@ button {
     justify-content: center;
     flex-direction: column;
     padding: 0 65px;
-    gap: 60px;
+    gap: 20px;
 }
 
 .media-container button {
@@ -679,10 +679,6 @@ button {
         height: 105px;
     }
 
-    .media-container {
-        gap: 40px;
-    }
-
     .media-container img.icon {
         width: 50px;
     }
@@ -722,9 +718,17 @@ button {
 
 
 @media screen and (max-width: 450px) {
+    .screen_result .points-background {
+        width: calc(100% * 350 / 590);
+    }
+
     .screen_result .points-value {
-        font-size: 40px;
+        font-size: 36px;
         left: 8%;
+    }
+
+    .media-container button {
+        padding: 22px;
     }
 
     .media-container img.icon {
@@ -772,16 +776,29 @@ button {
         font-size: 35px;
     }
 
+    .media-container {
+        padding: 0 60px;
+    }
+
+    .play_again {
+       right: 60px;
+    }
+
+    .media-container button {
+        padding: 18px;
+        gap: 20px;
+    }
+
+    .media-container .management-button {
+        padding: 15px 20px;
+    }
+
     .media-container img.icon {
         width: 35px;
     }
 
     .media-container img.text {
         height: 35px;
-    }
-
-    .media-container button {
-        gap: 15px;
     }
 
     .difficulty__button {
@@ -803,22 +820,22 @@ button {
     .screen_result .points-value {
         font-size: 26px;
     }
-
-    .media-container {
-        padding: 0px 35px;
-        gap: 20px;
-    }
-
-    .media-container button {
-        padding: 15px;
-    }
-
-    .media-container .management-button {
-        padding: 15px 20px;
-    }
 }
 
 @media screen and (max-width: 350px) {
+    .media-container {
+        padding: 0 50px;
+    }
+
+    .screen_result .points-value {
+        font-size: 24px;
+    }
+
+    .play_again {
+        right: 50px;
+        width: 70px;
+        height: 70px;
+    }
     .user-name {
         left: 80px;
         font-size: 15px;
