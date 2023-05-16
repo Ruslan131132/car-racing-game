@@ -771,6 +771,16 @@ button {
 
 }
 
+@media screen and (max-width: 420px) {
+    .user-name {
+        max-width: 140px;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
 @media screen and (max-width: 400px) {
     .screen_result .points-value {
         font-size: 35px;
@@ -822,6 +832,20 @@ button {
     }
 }
 
+@media screen and (max-width: 380px) {
+    .user-name {
+        max-width: 130px;
+        left: 90px;
+    }
+}
+
+@media screen and (max-width: 365px) {
+    .user-name {
+        max-width: 115px;
+        left: 90px;
+    }
+}
+
 @media screen and (max-width: 350px) {
     .media-container {
         padding: 0 50px;
@@ -839,6 +863,7 @@ button {
     .user-name {
         left: 80px;
         font-size: 15px;
+        max-width: 110px;
     }
 
     .management-button {
@@ -848,6 +873,12 @@ button {
 
     .management-button .management-subtext{
         font-size: 9px;
+    }
+}
+
+@media screen and (max-width: 330px) {
+    .user-name {
+        max-width: 95px;
     }
 }
 
