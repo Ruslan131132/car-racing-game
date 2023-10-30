@@ -100,7 +100,7 @@ document.querySelector('.splide__button').addEventListener('click', () => {
         speedSum = settings.speed / 2;
         speedSumInc = 0.5
         enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy3'];
-        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39943/'
+        cordiantHref.href = 'https://cordiant.ru/professional/cordiant-professional-dr-1/'
         generateGame()
     } else if (mode == 'winter_drive') {
         settings.mode = 'winter_drive'
@@ -108,20 +108,20 @@ document.querySelector('.splide__button').addEventListener('click', () => {
         speedSumInc = 0.5
         enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
         generateGame()
-        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39946/'
+        cordiantHref.href = 'https://cordiant.ru/car/winter/cordiant_winter_drive_2/'
     } else if (mode == 'snow_cross') {
         settings.mode = 'snow_cross'
         speedSum = settings.speed;
         speedSumInc = 1
         enemyStyles = ['enemy1', 'enemy2'];
-        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39901/'
+        cordiantHref.href = 'https://cordiant.ru/car/winter/snow_cross_2/'
         generateGame()
     } else if (mode == 'cars_drive') {
         settings.mode = 'cars_drive'
         speedSum = settings.speed;
         speedSumInc = 1
         enemyStyles = ['enemy1', 'enemy2', 'enemy3'];
-        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39901/'
+        cordiantHref.href = 'https://cordiant.ru/car/business/cordiant_business_ca2/'
         generateGame()
     }
 });
