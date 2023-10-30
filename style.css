@@ -34,6 +34,75 @@ button {
     z-index: 5;
 }
 
+
+/*SLIDER STYLES*/
+
+.splide__slide img {
+    width: 100%;
+    height: auto;
+}
+
+.splide__pagination {
+    display: none;
+}
+
+.splide__track {
+    padding-left: 60px !important;
+    padding-right: 60px !important;
+}
+
+.splide__list {
+    gap: 10px;
+    position: relative;
+    right: 10px;
+}
+
+/*.splide__slide.is-active {*/
+/*    margin: 0 20px;*/
+/*}*/
+
+.splide__slide:not(.is-active) {
+    opacity: 0.5;
+}
+
+.splide__arrows {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 10px;
+}
+
+.splide__arrow {
+    background: unset;
+    position: unset;
+    border: 0;
+    width: unset;
+    height: unset;
+    max-width: 35px;
+    max-height: 0;
+}
+
+.splide__arrow.splide__arrow--prev {
+    transform: rotate(180deg) translateY(50%);
+}
+
+.splide__button {
+    border: 0;
+    background: unset;
+    padding: 0;
+    z-index: 1;
+}
+
+.splide__button svg{
+    max-width: 170px;
+}
+
+.splide__arrow svg {
+    width: unset;
+    height: unset;
+}
 /*.billboard {*/
 /*    display: block;*/
 /*    position: absolute;*/
@@ -44,79 +113,135 @@ button {
 /*}*/
 
 /*.billboard.white {*/
-/*    background: rgba(0, 0, 0, 0) url(image/gravity/billboard-white.svg) center / cover no-repeat;*/
+/*    background: rgba(0, 0, 0, 0) url(image/winter_drive/billboard-white.svg) center / cover no-repeat;*/
 /*}*/
 
 /*.billboard.blue {*/
-/*    background: rgba(0, 0, 0, 0) url(image/gravity/billboard-blue.svg) center / cover no-repeat;*/
+/*    background: rgba(0, 0, 0, 0) url(image/winter_drive/billboard-blue.svg) center / cover no-repeat;*/
 /*}*/
 
 
-.car.gravity {
+.car.winter_drive {
     width: 60px;
     height: 107px;
-    background: rgba(0, 0, 0, 0) url(image/gravity/player.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/winter_drive/player.svg) center / cover no-repeat;
 }
 
-.car.comfort {
+.car.snow_cross {
     width: 60px;
     height: 117px;
-    background: rgba(0, 0, 0, 0) url(image/comfort/player.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/snow_cross/player.svg) center / cover no-repeat;
 }
 
-.car.offroad {
-    width: 60px;
-    height: 125px;
-    background: rgba(0, 0, 0, 0) url(image/offroad/player.svg) center / cover no-repeat;
+.car.trucks {
+    width: 65px;
+    height: 200px;
+    background: rgba(0, 0, 0, 0) url(image/trucks/player.svg) center / cover no-repeat;
 }
 
-.enemy.gravity.enemy1 {
+.car.cars_drive {
+    width: 65px;
+    height: 148px;
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/player.svg) center / cover no-repeat;
+}
+/*OFFICER*/
+.enemy.officer {
+    width: calc(590 / 320 * 100%);
+    height: 167px;
+    background: rgba(0, 0, 0, 0) url(image/officer.svg) center / cover no-repeat;
+    left: -24%;
+    transition: left 0.7s;
+}
+
+.enemy.officer.--hide {
+    left: -500px;
+}
+
+
+.enemy.winter_drive.enemy1 {
     width: 67px;
     height: 223px;
-    background: rgba(0, 0, 0, 0) url(image/gravity/enemy1.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/winter_drive/enemy1.svg) center / cover no-repeat;
 }
 
-.enemy.gravity.enemy2 {
+.enemy.winter_drive.enemy2 {
     width: 54px;
     height: 112px;
-    background: rgba(0, 0, 0, 0) url(image/gravity/enemy2.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/winter_drive/enemy2.svg) center / cover no-repeat;
 }
 
-.enemy.gravity.enemy3 {
+.enemy.winter_drive.enemy3 {
     width: 70px;
     height: 135px;
-    background: rgba(0, 0, 0, 0) url(image/gravity/enemy3.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/winter_drive/enemy3.svg) center / cover no-repeat;
 }
 
-.enemy.gravity.enemy4 {
+.enemy.winter_drive.enemy4 {
     width: 55px;
     height: 103px;
-    background: rgba(0, 0, 0, 0) url(image/gravity/enemy4.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/winter_drive/enemy4.svg) center / cover no-repeat;
 }
 
 
-.enemy.offroad.enemy1 {
+.enemy.trucks.enemy1 {
+    width: 67px;
+    height: 223px;
+    background: rgba(0, 0, 0, 0) url(image/trucks/enemy1.svg) center / cover no-repeat;
+}
+
+.enemy.trucks.enemy2 {
+    width: 54px;
+    height: 112px;
+    background: rgba(0, 0, 0, 0) url(image/trucks/enemy2.svg) center / cover no-repeat;
+}
+
+.enemy.trucks.enemy3 {
+    width: 70px;
+    height: 135px;
+    background: rgba(0, 0, 0, 0) url(image/trucks/enemy3.svg) center / cover no-repeat;
+}
+
+.enemy.trucks.enemy4 {
+    width: 55px;
+    height: 103px;
+    background: rgba(0, 0, 0, 0) url(image/trucks/enemy4.svg) center / cover no-repeat;
+}
+
+
+.enemy.cars_drive.enemy1 {
     width: calc(100% * 133 /390);
     height: calc(100% * 49 / 1200);
-    background: rgba(0, 0, 0, 0) url(image/offroad/enemy1.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/enemy1.svg) center / cover no-repeat;
 }
 
-.enemy.offroad.enemy2 {
+.enemy.cars_drive.enemy2 {
     width: calc(100% * 111 /390);
     height: calc(100% * 50 / 1200);
-    background: rgba(0, 0, 0, 0) url(image/offroad/enemy2.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/enemy2.svg) center / cover no-repeat;
 }
 
-.enemy.comfort.enemy1 {
-    width: calc(100% * 89 /390);
+.enemy.cars_drive.enemy3 {
+    width: calc(100% * 128 /390);
+    height: calc(100% * 74 / 1200);
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/enemy3.svg) center / cover no-repeat;
+}
+
+.enemy.snow_cross.enemy1 {
+    width: calc(100% * 133 /390);
     height: calc(100% * 49 / 1200);
-    background: rgba(0, 0, 0, 0) url(image/comfort/enemy1.svg) center / cover no-repeat;
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/enemy1.svg) center / cover no-repeat;
 }
 
-.enemy.comfort.enemy2 {
-    width: calc(100% * 30 /390);
-    height: calc(100% * 35 / 1200);
-    background: rgba(0, 0, 0, 0) url(image/comfort/enemy2.svg) center / cover no-repeat;
+.enemy.snow_cross.enemy2 {
+    width: calc(100% * 111 /390);
+    height: calc(100% * 50 / 1200);
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/enemy2.svg) center / cover no-repeat;
+}
+
+.enemy.snow_cross.enemy3 {
+    width: calc(100% * 128 /390);
+    height: calc(100% * 74 / 1200);
+    background: rgba(0, 0, 0, 0) url(image/cars_drive/enemy3.svg) center / cover no-repeat;
 }
 
 .gamearea {
@@ -132,7 +257,7 @@ button {
     left: 0;
     right: 0;
     height: 300px;
-    background-image: url("image/gravity/img_1.png");
+    background-image: url("image/winter_drive/img_1.png");
     /*width: 100%;*/
     background-size: 100% 300px;
     background-repeat: no-repeat;
@@ -140,13 +265,13 @@ button {
     max-width: 590px;
 }
 
-.line_block.gravity.img_1 {
-    background-image: url("image/gravity/img_1.png");
+.line_block.winter_drive.img_1 {
+    background-image: url("image/winter_drive/img_1.png");
 }
 
-.line_block.gravity.img_1:before {
+.line_block.winter_drive.img_1:before {
     content: '';
-    background-image: url(image/gravity/billboard-white.svg);
+    background-image: url(image/winter_drive/billboard-white.svg);
     z-index: 11;
     width: 167px;
     height: 142px;
@@ -158,17 +283,17 @@ button {
     background-size: cover;
 }
 
-.line_block.gravity.img_2 {
-    background-image: url("image/gravity/img_2.png");
+.line_block.winter_drive.img_2 {
+    background-image: url("image/winter_drive/img_2.png");
 }
 
-.line_block.gravity.img_3 {
-    background-image: url("image/gravity/img_3.png");
+.line_block.winter_drive.img_3 {
+    background-image: url("image/winter_drive/img_3.png");
 }
 
-.line_block.gravity.img_3:before {
+.line_block.winter_drive.img_3:before {
     content: '';
-    background-image: url(image/gravity/billboard-blue.svg);
+    background-image: url(image/winter_drive/billboard-blue.svg);
     z-index: 11;
     width: 167px;
     height: 142px;
@@ -180,46 +305,78 @@ button {
     background-size: cover;
 }
 
-.line_block.gravity.img_4 {
-    background-image: url("image/gravity/img_4.png");
+.line_block.winter_drive.img_4 {
+    background-image: url("image/winter_drive/img_4.png");
 }
 
-.line_block.offroad.img_1 {
-    background-image: url("image/offroad/img_1.png");
+.line_block.winter_drive.img_5 {
+    background-image: url("image/winter_drive/img_5.png");
 }
 
-.line_block.offroad.img_2 {
-    background-image: url("image/offroad/img_2.png");
+.line_block.trucks.img_1 {
+    background-image: url("image/trucks/img_1.png");
 }
 
-.line_block.offroad.img_3 {
-    background-image: url("image/offroad/img_3.png");
+.line_block.trucks.img_2 {
+    background-image: url("image/trucks/img_2.png");
 }
 
-.line_block.offroad.img_4 {
-    background-image: url("image/offroad/img_4.png");
+.line_block.trucks.img_3 {
+    background-image: url("image/trucks/img_3.png");
 }
 
-.line_block.comfort.img_1 {
-    background-image: url("image/comfort/img_1.png");
+.line_block.trucks.img_4 {
+    background-image: url("image/trucks/img_4.png");
 }
 
-.line_block.comfort.img_2 {
-    background-image: url("image/comfort/img_2.png");
+.line_block.trucks.img_5 {
+    background-image: url("image/trucks/img_5.png");
 }
 
-.line_block.comfort.img_3 {
-    background-image: url("image/comfort/img_3.png");
+.line_block.cars_drive.img_1 {
+    background-image: url("image/cars_drive/img_1.png");
 }
 
-.line_block.comfort.img_4 {
-    background-image: url("image/comfort/img_4.png");
+.line_block.cars_drive.img_2 {
+    background-image: url("image/cars_drive/img_2.png");
+}
+
+.line_block.cars_drive.img_3 {
+    background-image: url("image/cars_drive/img_3.png");
+}
+
+.line_block.cars_drive.img_4 {
+    background-image: url("image/cars_drive/img_4.png");
+}
+
+.line_block.cars_drive.img_5 {
+    background-image: url("image/cars_drive/img_5.png");
+}
+
+.line_block.snow_cross.img_1 {
+    background-image: url("image/snow_cross/img_1.png");
+}
+
+.line_block.snow_cross.img_2 {
+    background-image: url("image/snow_cross/img_2.png");
+}
+
+.line_block.snow_cross.img_3 {
+    background-image: url("image/snow_cross/img_3.png");
+}
+
+.line_block.snow_cross.img_4 {
+    background-image: url("image/snow_cross/img_4.png");
+}
+
+.line_block.snow_cross.img_5 {
+    background-image: url("image/snow_cross/img_5.png");
 }
 
 .puddle {
     width: 100%;
     height: calc(100vw * 135 / 590);
-    background-image: url(image/offroad/puddle.svg);
+    background-image: url(image/trucks/puddle.svg);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center;
@@ -227,6 +384,19 @@ button {
     z-index: 4;
     max-height: 154px;
     left: 0;
+}
+
+.puddle_ice {
+    width: 17%;
+    height: calc(100vw * 200 / 590);
+    background-image: url(image/trucks/puddle_ice.svg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+    position: absolute;
+    z-index: 4;
+    max-height: 154px;
+    left: 10%;
 }
 
 .splash {
@@ -308,6 +478,24 @@ button {
 
 .screen_start, .screen_result {
     background: radial-gradient(50% 50% at 50% 50%, #265D96 0%, #002954 100%);
+}
+
+
+.screen_start {
+    background: url(image/snow.png) no-repeat, radial-gradient(50% 50% at 50% 50%, #265D96 0%, #002954 100%);
+    background-size: contain;
+}
+
+.screen_start:after {
+    content: "";
+    background: url(image/snow_bottom.png) no-repeat;
+    background-size: 100%;
+    position: absolute;
+    display: block;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
 }
 
 .screen_show {
@@ -409,6 +597,14 @@ button {
     transition: opacity 0.1s ease-in-out;
 }
 
+.modal-overlay.question {
+    background: rgba(145, 145, 145, 0.30);
+    backdrop-filter: blur(15px);
+    height: 100vh;
+    z-index: 1000;
+    overflow: scroll;
+}
+
 .modal {
     position: fixed;
     /*top: 50%;*/
@@ -423,10 +619,35 @@ button {
     padding: 45px;
 }
 
+.modal-overlay.question .modal {
+    border-radius: 12px;
+    background: #FFF;
+    padding: 40px;
+    width: calc(100% - 130px);
+    position: unset;
+    z-index: 1001;
+    height: unset;
+    margin: auto;
+}
+
+.modal-overlay.question .modal-title {
+    color: #074989;
+    text-align: center;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 100%;
+}
+
+
 .modal-overlay.--show {
     display: block;
     opacity: 1;
     pointer-events: auto;
+}
+
+.modal-overlay.question.--show {
+    display: flex;
 }
 
 .modal-header {
@@ -448,6 +669,23 @@ button {
     width: 84px;
     background-image: url(image/icons/back.svg);
     background-size: cover;
+}
+
+.modal-overlay.question .options {
+    padding-top: 20px;
+}
+
+.modal-overlay.question .option-item {
+    min-height: 40px;
+    margin-top: 20px;
+    border-radius: 12px;
+    border: 1px solid #074989;
+    padding: 12px 20px;
+    color: #074989;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 100%;
 }
 
 .modal-body {
@@ -597,6 +835,28 @@ button {
     bottom: 120px;
 }
 
+.modal-overlay.officer-stopped,
+.modal-overlay.officer-success,
+.modal-overlay.officer-error
+{
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1000;
+}
+
+.modal-overlay.officer-stopped {
+    background-image: url(image/officer-stopped.png);
+}
+
+.modal-overlay.officer-success {
+    background-image: url(image/officer-success.png);
+}
+
+.modal-overlay.officer-error {
+    background-image: url(image/officer-error.png);
+}
 
 @keyframes spin {
     0%, 100% {
@@ -627,7 +887,7 @@ button {
     }
 
     .start__menu-container {
-        padding: 15px 10px 0 30px;
+        padding: 30px 0 0 ;
     }
 
     .difficulty__button {
@@ -664,19 +924,29 @@ button {
 }
 
 @media screen and (max-width: 500px) {
-    .car.gravity {
+    .car.winter_drive {
         width: 55px;
         height: 98px;
     }
 
-    .car.comfort {
+    .car.snow_cross {
         width: 50px;
         height: 98px;
     }
 
-    .car.offroad {
-        width: 50px;
-        height: 105px;
+    .car.trucks {
+        width: 60px;
+        height: 185px;
+    }
+
+    .car.cars_drive {
+        width: 60px;
+        height: 137px;
+    }
+
+    .enemy.officer {
+        width: calc(590 / 399 * 100%);
+        height: 136px;
     }
 
     .media-container img.icon {
@@ -752,7 +1022,7 @@ button {
     .start__menu-logo .poster {
         margin-top: -15px;
         display: block;
-        height: 140px;
+        height: 90px;
     }
 
     .modal-close {
@@ -816,7 +1086,8 @@ button {
     }
 
     .start__menu-logo .poster {
-        height: 110px;
+        height: 80px;
+        margin-top: 20px;
     }
 
     .screen_result .points-block {

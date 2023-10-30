@@ -12,7 +12,7 @@ const score = document.querySelector('.score_container'),
     pointsValue = document.querySelector('.points-value'),
     startMenu = document.querySelector('.start__menu');
 
-let allowSwipe = true;
+let allowSwipe = false;
 
 let posInit = 0,
     posX1 = 0,
@@ -38,12 +38,14 @@ const enemyPositions = [
     (330 / 390),
 ];
 
+officerPosition = 65 / 390;
+
 const settings = {
     start: false,
     score: 0,
     speed: 6,
     traffic: 3,
-    mode: 'gravity'
+    mode: 'winter_drive'
 };
 
 
@@ -71,9 +73,9 @@ splashAudio.volume = 0.1;
 
 //Лужа
 const puddle = document.createElement('div');
-puddle.classList.add('puddle');
-puddle.y = -2500;
-puddle.style.top = '-2500px';
+puddle.classList.add('puddle_ice');
+puddle.y = -1500;
+puddle.style.top = '-1500px';
 
 //ВСПЛЕСК
 const splash = document.createElement('div');
@@ -91,35 +93,41 @@ function random(num) {
     return Math.floor(Math.random() * num);
 }
 
-diffBtn.forEach(item => {
-    item.addEventListener('click', () => {
-        if (item.classList.contains('offroad')) {
-            settings.mode = 'offroad'
-            speedSum = settings.speed;
-            speedSumInc = 1
-            enemyStyles = ['enemy1', 'enemy2'];
-            cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39943/'
-            generateGame()
-        } else if (item.classList.contains('gravity')) {
-            settings.mode = 'gravity'
-            speedSum = settings.speed / 2;
-            speedSumInc = 0.5
-            enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
-            generateGame()
-            cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39946/'
-        } else if (item.classList.contains('comfort')) {
-            settings.mode = 'comfort'
-            item.classList.add('active');
-            speedSum = settings.speed;
-            speedSumInc = 1
-            enemyStyles = ['enemy1', 'enemy2'];
-            cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39901/'
-            generateGame()
-        }
-    });
+document.querySelector('.splide__button').addEventListener('click', () => {
+    let mode = document.querySelector('.splide__slide.is-active').dataset.mode;
+    if (mode == 'trucks') {
+        settings.mode = 'trucks'
+        speedSum = settings.speed / 2;
+        speedSumInc = 0.5
+        enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy3'];
+        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39943/'
+        generateGame()
+    } else if (mode == 'winter_drive') {
+        settings.mode = 'winter_drive'
+        speedSum = settings.speed / 2;
+        speedSumInc = 0.5
+        enemyStyles = ['enemy1', 'enemy2', 'enemy3', 'enemy4'];
+        generateGame()
+        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39946/'
+    } else if (mode == 'snow_cross') {
+        settings.mode = 'snow_cross'
+        speedSum = settings.speed;
+        speedSumInc = 1
+        enemyStyles = ['enemy1', 'enemy2'];
+        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39901/'
+        generateGame()
+    } else if (mode == 'cars_drive') {
+        settings.mode = 'cars_drive'
+        speedSum = settings.speed;
+        speedSumInc = 1
+        enemyStyles = ['enemy1', 'enemy2', 'enemy3'];
+        cordiantHref.href = 'https://cordiant.ru/products/cordiant/detail/39901/'
+        generateGame()
+    }
 });
 
 function generateGame() {
+    allowSwipe = true
     game.innerHTML = '';
     screenGame.classList.add('screen-show')
     screenGame.classList.remove('screen_hide')
@@ -150,7 +158,14 @@ function generateGame() {
         line_block.classList.add(settings.mode);
         let img = lineStyles[random(lineStyles.length)]
         line_block.classList.add(img);
-        line_block.dataset.img =img;
+        line_block.dataset.img = img;
+        line_block.dataset.officer = "0";
+        if (j == 1) {
+            line_block.classList.add('img_5');
+            line_block.dataset.img = 'img_5';
+            line_block.dataset.officer = "1";
+        }
+
         line_block.style.bottom = (j) * 298 + 'px';
         line_block.y = ((j) * 298);
         // line_block.style.backgroundImage = 'url("image/' + settings.mode + '/' + lineStyles[random(lineStyles.length)] + '.png")'
@@ -167,43 +182,62 @@ function generateGame() {
         let enemyOffsetsArray = JSON.parse(JSON.stringify(enemyOffsets));
         lineAvailablePositions[i] = [...enemyPositions];
 
-        for (let j = 0; j < countCars; j++) {//lines
-            let randPos = random(lineAvailablePositions[i].length)
-            let carPos = lineAvailablePositions[i][randPos];
-            let randOffset = random(enemyOffsetsArray.length)
-            let enemyOffset = enemyOffsetsArray[randOffset]
-            lineAvailablePositions[i].splice(randPos, 1)
-            enemyOffsetsArray.splice(randOffset, 1)
-            const enemy = document.createElement('div');
-            enemy.classList.add('enemy');
-            enemy.classList.add(settings.mode);
-            enemy.dataset.line = i;
-            enemy.dataset.pos = carPos;
-            enemy.dataset.offset = enemyOffset;
-            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-            enemy.classList.add(chosen_enemy);
-            if (settings.mode == 'offroad' && chosen_enemy =='enemy2') {
-                enemy.classList.add('free');
+        if (i == 3) {
+            lineAvailablePositions[i].splice(0, 1) // левая часть
+            const officer = document.createElement('div');
+            let officerPos = lineAvailablePositions[i][0];
+            officer.classList.add('enemy');
+            officer.dataset.line = i;
+            officer.dataset.pos = officerPos;
+            officer.dataset.offset = 0;
+            officer.classList.add('officer');
+            officer.dataset.current = 'officer';
+            officer.y = y - 120
+            officer.style.top = officer.y + 'px';
+            gameArea.appendChild(officer);
+            officer.classList.add("--hide");
+            // officer.style.left = gameArea.offsetWidth * officerPos - (officer.clientWidth / 2) + 'px'
+        } else  {
+            for (let j = 0; j < countCars; j++) {//lines
+                let randPos = random(lineAvailablePositions[i].length)
+                let carPos = lineAvailablePositions[i][randPos];
+                let randOffset = random(enemyOffsetsArray.length)
+                let enemyOffset = enemyOffsetsArray[randOffset]
+                lineAvailablePositions[i].splice(randPos, 1)
+                enemyOffsetsArray.splice(randOffset, 1)
+                const enemy = document.createElement('div');
+                enemy.classList.add('enemy');
+                enemy.classList.add(settings.mode);
+                enemy.dataset.line = i;
+                enemy.dataset.pos = carPos;
+                enemy.dataset.offset = enemyOffset;
+                let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+                enemy.classList.add(chosen_enemy);
+                // if (settings.mode == 'trucks' && chosen_enemy =='enemy2') {
+                //     enemy.classList.add('free');
+                // }
+                enemy.dataset.current = chosen_enemy;
+                enemy.y = y + enemyOffset
+                enemy.style.top = enemy.y + 'px';
+                gameArea.appendChild(enemy);
+                enemy.style.left = gameArea.offsetWidth * carPos - (enemy.clientWidth / 2) + 'px'
             }
-            enemy.dataset.current = chosen_enemy;
-            enemy.y = y + enemyOffset
-            enemy.style.top = enemy.y + 'px';
-            gameArea.appendChild(enemy);
-            enemy.style.left = gameArea.offsetWidth * carPos - (enemy.clientWidth / 2) + 'px'
         }
+
+
     }
     enemies = document.querySelectorAll('.enemy');
 
     //Background лужи
-    if (settings.mode == 'offroad') {
-        puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle.svg")'
+    if (settings.mode == 'trucks' || settings.mode == 'cars_drive') {
+        puddle.style.backgroundImage = 'url("image/' + settings.mode + '/puddle_ice.svg")'
         gameArea.appendChild(puddle);
-        gameArea.appendChild(splash);
+        // gameArea.appendChild(splash);
     }
 
     //Машина на другой полосе
 
-    // if (settings.mode == 'gravity') {
+    // if (settings.mode == 'winter_drive') {
     //     let chosen_enemy = enemyStyles[random(enemyStyles.length)]
     //     enemyBack.style.background =
     //         'rgba(0, 0, 0, 0) url(image/' + settings.mode + '/' + chosen_enemy.name + '.svg) center / cover no-repeat';
@@ -221,6 +255,7 @@ function generateGame() {
     audio.autoplay = true;
     audio.loop = true;
     audio.play();
+    startTimeoutOfficer();
     requestAnimationFrame(playGame);
 }
 
@@ -297,7 +332,7 @@ function playGame() {
         score.innerHTML = settings.score;
         moveRoad();
         moveEnemy();
-        if (settings.mode == 'offroad') {
+        if (settings.mode == 'trucks' || settings.mode == 'cars_drive') {
             movePuddle();
         }
 
@@ -338,10 +373,12 @@ function moveRoad() {
         line.style.bottom = line.y + 'px';
         if (line.y <= -298) {
             line.y = 1192 + line.y + 298;
-            let img = lineStyles[random(lineStyles.length)]
-            line.classList.remove(line.dataset.img);
-            line.classList.add(img);
-            line.dataset.img =img;
+            if (line.dataset.officer != "1") {
+                let img = lineStyles[random(lineStyles.length)]
+                line.classList.remove(line.dataset.img);
+                line.classList.add(img);
+                line.dataset.img = img;
+            }
         }
     });
 }
@@ -356,70 +393,107 @@ function moveEnemy() {
             carRect.left <= enemyRect.right &&
             carRect.bottom >= enemyRect.top
         ) {
-            settings.start = false;
-            boomAudio.play()
-            audio.pause();
-            audio.currentTime = 0;
-            audio.autoplay = false;
+            if (!item.classList.contains('officer')) {
+                settings.start = false;
+                boomAudio.play()
+                audio.pause();
+                audio.currentTime = 0;
+                audio.autoplay = false;
 
-            settings.speed = 6
-            pointsValue.innerHTML = settings.score;
-            speedSum = settings.mode == 'gravity' ? settings.speed / 2 : settings.speed
-            puddleSpeedSum = settings.speed;
+                settings.speed = 6
+                pointsValue.innerHTML = settings.score;
+                speedSum = settings.mode == 'winter_drive' || settings.mode == 'trucks' ? settings.speed / 2 : settings.speed
+                puddleSpeedSum = settings.speed;
 
-            savePoints({
-                mode: settings.mode,
-                score: settings.score
-            });
+                savePoints({
+                    mode: settings.mode,
+                    score: settings.score
+                });
 
-            setTimeout(() => {
-                game.innerHTML = '';
-                boomAudio.pause();
-                boomAudio.currentTime = 0;
-                screenResult.classList.remove('screen_hide');
-                screenStart.classList.add('screen_hide');
-                screenGame.classList.add('screen_hide');
-                againBtn.classList.add(settings.mode);
-                screenGame.classList.remove('screen-up')
-                score.classList.add('hide');
-            }, 2000);
+                setTimeout(() => {
+                    game.innerHTML = '';
+                    boomAudio.pause();
+                    boomAudio.currentTime = 0;
+                    screenResult.classList.remove('screen_hide');
+                    screenStart.classList.add('screen_hide');
+                    screenGame.classList.add('screen_hide');
+                    againBtn.classList.add(settings.mode);
+                    screenGame.classList.remove('screen-up')
+                    score.classList.add('hide');
+                }, 2000);
+            } else {
+                settings.start = false;
+                audio.pause();
+
+                document.querySelector('.modal-overlay.officer-stopped').classList.add('--show')
+                setTimeout(() => {
+                    document.querySelector('.modal-overlay.officer-stopped').classList.remove('--show')
+                    showQuestionModal();
+                }, 2000);
+            }
+
         }
-        item.y += speedSum;
+        if (!item.classList.contains('officer')) {
+            item.y += speedSum;
+        } else {
+            item.y += puddleSpeedSum;
+        }
         item.style.top = item.y + 'px';
         if (item.y >= document.documentElement.clientHeight) {
             item.y = -8000 + document.documentElement.clientHeight;
-            let carPos =  lineAvailablePositions[item.dataset.line][0];
-            item.style.left = gameArea.offsetWidth * carPos - (item.offsetWidth / 2) + 'px'
-            lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
-            item.dataset.pos = carPos;
+            if (!item.classList.contains('officer')) {
+                let carPos =  lineAvailablePositions[item.dataset.line][0];
+                item.style.left = gameArea.offsetWidth * carPos - (item.offsetWidth / 2) + 'px'
+                lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
+                item.dataset.pos = carPos;
+            }
         }
     });
 }
 
 function movePuddle() {
-    let carRect = car.getBoundingClientRect();
-    let carXPos = car.style.left;
-    let enemyRect = puddle.getBoundingClientRect();
-    if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
-        splashAudio.play()
-        splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 212 / 590 / 2) - 25) + 'px)'
-        splash.style.top = carRect.top + 'px';
-        splash.classList.remove('hide');
-        setTimeout(() => {
-            splash.classList.add('splash-after');
-            splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 300 / 590 / 2) - 25) + 'px)'
-            splash.style.top = carRect.top + 'px';
-            setTimeout(() => {
-                splash.classList.remove('splash-after');
-                splash.classList.add('hide');
-            }, 100);
-        }, 100);
-    }
+    // let carRect = car.getBoundingClientRect();
+    // let carXPos = car.style.left;
+    // let enemyRect = puddle.getBoundingClientRect();
+    // if (carRect.top - enemyRect.bottom <= puddleSpeedSum && carRect.top - enemyRect.bottom >= -puddleSpeedSum) {
+    //     splashAudio.play()
+    //     splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 212 / 590 / 2) - 25) + 'px)'
+    //     splash.style.top = carRect.top + 'px';
+    //     splash.classList.remove('hide');
+    //     setTimeout(() => {
+    //         splash.classList.add('splash-after');
+    //         splash.style.left = 'calc(' + carXPos +  ' - ' + ((gameArea.offsetWidth * 300 / 590 / 2) - 25) + 'px)'
+    //         splash.style.top = carRect.top + 'px';
+    //         setTimeout(() => {
+    //             splash.classList.remove('splash-after');
+    //             splash.classList.add('hide');
+    //         }, 100);
+    //     }, 100);
+    // }
     puddle.y += puddleSpeedSum;
     puddle.style.top = puddle.y + 'px';
     if (puddle.y >= document.documentElement.clientHeight) {
-        puddle.y = -2500;
+        puddle.y = -1500;
     }
+}
+
+function showOfficer()
+{
+    // document.querySelector('.officer').style.left = '-24%'
+    // document.querySelector('.officer').style.display = 'block'
+    document.querySelector('.officer').classList.remove("--hide");
+}
+
+function hideOfficer()
+{
+    // document.querySelector('.officer').style.left = '-600px';
+    // document.querySelector('.officer').style.display = 'none'
+    document.querySelector('.officer').classList.add("--hide");
+}
+
+function startTimeoutOfficer()
+{
+    setTimeout(() => showOfficer(), 20000);
 }
 
 leaderBtn.onclick = () => {
@@ -427,7 +501,7 @@ leaderBtn.onclick = () => {
     let modalBody = document.querySelector('.modal-body');
     modalBody.innerHTML = ''
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://cordiant.4k-pr.com/api/getTopUsers', true);
+    xhr.open('GET', 'http://cordiant.4k-pr.com/api/cordiant/getTopUsers', true);
 
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -454,6 +528,93 @@ leaderBtn.onclick = () => {
 
 }
 
+function showQuestionModal()
+{
+    document.querySelector('.modal-overlay.question').classList.add('--show')
+    let modalBody = document.querySelector('.modal-overlay.question .options');
+    let modalTitle = document.querySelector('.modal-overlay.question .modal-title');
+    modalBody.innerHTML = ''
+    modalTitle.innerHTML = ''
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://cordiant.4k-pr.com/api/cordiant/question/random', true);
+
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhr.send();
+
+    xhr.onload = function () {
+        if (xhr.status != 200) { // анализируем HTTP-статус ответа, если статус не 200, то произошла ошибка
+            console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`);
+        } else {
+            let response = JSON.parse(xhr.response);
+            modalTitle.innerHTML = response.data.title;
+            modalBody.innerHTML = response.data.questions.map(item => {
+                return `<div class="option-item" data-correct="${item.correct}">
+                ${item.text}
+            </div>`
+            }).join('');
+
+            document.querySelectorAll('.option-item').forEach((optionItem) => {
+                optionItem.onclick = (event) => {
+                    if (event.currentTarget.dataset.correct == 1)
+                    {
+                        closeQuestionModal();
+                        document.querySelector('.modal-overlay.officer-stopped').classList.remove('--show')
+                        document.querySelector('.modal-overlay.officer-success').classList.add('--show')
+                        setTimeout(() => {
+                            document.querySelector('.modal-overlay.officer-success').classList.remove('--show')
+                            hideOfficer();
+                            settings.start = true;
+                            audio.play();
+                            requestAnimationFrame(playGame);
+                            startTimeoutOfficer();
+                        }, 2000);
+                    } else {
+                        closeQuestionModal();
+                        audio.currentTime = 0;
+                        audio.autoplay = false;
+                        settings.speed = 6
+                        pointsValue.innerHTML = settings.score;
+                        speedSum = settings.mode == 'winter_drive' || settings.mode == 'trucks'  ? settings.speed / 2 : settings.speed
+                        puddleSpeedSum = settings.speed;
+
+                        savePoints({
+                            mode: settings.mode,
+                            score: settings.score
+                        });
+
+                        document.querySelector('.modal-overlay.officer-stopped').classList.remove('--show')
+                        document.querySelector('.modal-overlay.officer-error').classList.add('--show')
+                        setTimeout(() => {
+                            document.querySelector('.modal-overlay.officer-error').classList.remove('--show')
+                            game.innerHTML = '';
+                            boomAudio.pause();
+                            boomAudio.currentTime = 0;
+                            screenResult.classList.remove('screen_hide');
+                            screenStart.classList.add('screen_hide');
+                            screenGame.classList.add('screen_hide');
+                            againBtn.classList.add(settings.mode);
+                            screenGame.classList.remove('screen-up')
+                            score.classList.add('hide');
+                        }, 2000);
+                    }
+                }
+            });
+
+        }
+    };
+}
+
+
+function closeQuestionModal()
+{
+    document.querySelector('.modal-overlay.question').classList.remove('--show')
+}
+
+
+
+
+
 function savePoints(data) {
     const urlParams = new URLSearchParams(window.location.search);
     let user_id = urlParams.get('user_id')
@@ -467,7 +628,7 @@ function savePoints(data) {
     });
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://cordiant.4k-pr.com/api/addPoints', true);
+    xhr.open('POST', 'http://cordiant.4k-pr.com/api/cordiant/addPoints', true);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.send(formData);
