@@ -558,12 +558,12 @@ function showQuestionModal()
                 optionItem.onclick = (event) => {
                     if (event.currentTarget.dataset.correct == 1)
                     {
+                        hideOfficer();
                         closeQuestionModal();
                         document.querySelector('.modal-overlay.officer-stopped').classList.remove('--show')
                         document.querySelector('.modal-overlay.officer-success').classList.add('--show')
                         setTimeout(() => {
                             document.querySelector('.modal-overlay.officer-success').classList.remove('--show')
-                            hideOfficer();
                             settings.start = true;
                             audio.play();
                             requestAnimationFrame(playGame);
