@@ -13,6 +13,9 @@ const score = document.querySelector('.score_container'),
     startMenu = document.querySelector('.start__menu');
 
 let allowSwipe = false;
+let isOfficerActive = false;
+let crossedSlowBlock = false;
+let timeOutId = null;
 
 let posInit = 0,
     posX1 = 0,
@@ -45,6 +48,7 @@ const settings = {
     score: 0,
     speed: 6,
     traffic: 3,
+    last: 6,
     mode: 'winter_drive'
 };
 
@@ -160,9 +164,16 @@ function generateGame() {
         line_block.classList.add(img);
         line_block.dataset.img = img;
         line_block.dataset.officer = "0";
-        if (j == 1) {
-            line_block.classList.add('img_5');
-            line_block.dataset.img = 'img_5';
+        if (j == 2) {
+            line_block.classList.add('slow_before_officer');
+            line_block.classList.add('enemy');
+        }
+        if (j == 3) {
+            // line_block.classList.add('img_5');
+            line_block.classList.add('officer_img');
+            line_block.classList.add('enemy');
+            line_block.classList.add(settings.mode);
+            // line_block.dataset.img = 'img_5';
             line_block.dataset.officer = "1";
         }
 
@@ -182,47 +193,47 @@ function generateGame() {
         let enemyOffsetsArray = JSON.parse(JSON.stringify(enemyOffsets));
         lineAvailablePositions[i] = [...enemyPositions];
 
-        if (i == 3) {
-            lineAvailablePositions[i].splice(0, 1) // левая часть
-            const officer = document.createElement('div');
-            let officerPos = lineAvailablePositions[i][0];
-            officer.classList.add('enemy');
-            officer.dataset.line = i;
-            officer.dataset.pos = officerPos;
-            officer.dataset.offset = 0;
-            officer.classList.add('officer');
-            officer.dataset.current = 'officer';
-            officer.y = y - 120
-            officer.style.top = officer.y + 'px';
-            gameArea.appendChild(officer);
-            officer.classList.add("--hide");
-            // officer.style.left = gameArea.offsetWidth * officerPos - (officer.clientWidth / 2) + 'px'
-        } else  {
-            for (let j = 0; j < countCars; j++) {//lines
-                let randPos = random(lineAvailablePositions[i].length)
-                let carPos = lineAvailablePositions[i][randPos];
-                let randOffset = random(enemyOffsetsArray.length)
-                let enemyOffset = enemyOffsetsArray[randOffset]
-                lineAvailablePositions[i].splice(randPos, 1)
-                enemyOffsetsArray.splice(randOffset, 1)
-                const enemy = document.createElement('div');
-                enemy.classList.add('enemy');
-                enemy.classList.add(settings.mode);
-                enemy.dataset.line = i;
-                enemy.dataset.pos = carPos;
-                enemy.dataset.offset = enemyOffset;
-                let chosen_enemy = enemyStyles[random(enemyStyles.length)]
-                enemy.classList.add(chosen_enemy);
-                // if (settings.mode == 'trucks' && chosen_enemy =='enemy2') {
-                //     enemy.classList.add('free');
-                // }
-                enemy.dataset.current = chosen_enemy;
-                enemy.y = y + enemyOffset
-                enemy.style.top = enemy.y + 'px';
-                gameArea.appendChild(enemy);
-                enemy.style.left = gameArea.offsetWidth * carPos - (enemy.clientWidth / 2) + 'px'
-            }
+        // if (i == 15) {
+        //     lineAvailablePositions[i].splice(0, 1) // левая часть
+        //     const officer = document.createElement('div');
+        //     let officerPos = lineAvailablePositions[i][0];
+        //     officer.classList.add('enemy');
+        //     officer.dataset.line = i;
+        //     officer.dataset.pos = officerPos;
+        //     officer.dataset.offset = 0;
+        //     officer.classList.add('officer');
+        //     officer.dataset.current = 'officer';
+        //     officer.y = y - 120
+        //     officer.style.top = officer.y + 'px';
+        //     gameArea.appendChild(officer);
+        //     officer.classList.add("--hide");
+        //     // officer.style.left = gameArea.offsetWidth * officerPos - (officer.clientWidth / 2) + 'px'
+        // } else  {
+        for (let j = 0; j < countCars; j++) { //lines
+            let randPos = random(lineAvailablePositions[i].length)
+            let carPos = lineAvailablePositions[i][randPos];
+            let randOffset = random(enemyOffsetsArray.length)
+            let enemyOffset = enemyOffsetsArray[randOffset]
+            lineAvailablePositions[i].splice(randPos, 1)
+            enemyOffsetsArray.splice(randOffset, 1)
+            const enemy = document.createElement('div');
+            enemy.classList.add('enemy');
+            enemy.classList.add(settings.mode);
+            enemy.dataset.line = i;
+            enemy.dataset.pos = carPos;
+            enemy.dataset.offset = enemyOffset;
+            let chosen_enemy = enemyStyles[random(enemyStyles.length)]
+            enemy.classList.add(chosen_enemy);
+            // if (settings.mode == 'trucks' && chosen_enemy =='enemy2') {
+            //     enemy.classList.add('free');
+            // }
+            enemy.dataset.current = chosen_enemy;
+            enemy.y = y + enemyOffset
+            enemy.style.top = enemy.y + 'px';
+            gameArea.appendChild(enemy);
+            enemy.style.left = gameArea.offsetWidth * carPos - (enemy.clientWidth / 2) + 'px'
         }
+        // }
 
 
     }
@@ -373,12 +384,10 @@ function moveRoad() {
         line.style.bottom = line.y + 'px';
         if (line.y <= -298) {
             line.y = 1192 + line.y + 298;
-            if (line.dataset.officer != "1") {
-                let img = lineStyles[random(lineStyles.length)]
-                line.classList.remove(line.dataset.img);
-                line.classList.add(img);
-                line.dataset.img = img;
-            }
+            let img = isOfficerActive && line.dataset.officer == "1" ? 'img_5' : lineStyles[random(lineStyles.length)];
+            line.classList.remove(line.dataset.img);
+            line.classList.add(img);
+            line.dataset.img = img;
         }
     });
 }
@@ -393,14 +402,15 @@ function moveEnemy() {
             carRect.left <= enemyRect.right &&
             carRect.bottom >= enemyRect.top
         ) {
-            if (!item.classList.contains('officer')) {
+            if (!item.classList.contains('officer_img') && !item.classList.contains('slow_before_officer')) {
                 settings.start = false;
                 boomAudio.play()
                 audio.pause();
                 audio.currentTime = 0;
                 audio.autoplay = false;
-
                 settings.speed = 6
+                clearOfficerTimeOut();
+                hideOfficer();
                 pointsValue.innerHTML = settings.score;
                 speedSum = settings.mode == 'winter_drive' || settings.mode == 'trucks' ? settings.speed / 2 : settings.speed
                 puddleSpeedSum = settings.speed;
@@ -421,33 +431,37 @@ function moveEnemy() {
                     screenGame.classList.remove('screen-up')
                     score.classList.add('hide');
                 }, 2000);
-            } else {
+            } else if (!crossedSlowBlock && document.querySelector('.img_5') && isOfficerActive && item.classList.contains('slow_before_officer')) {
+                crossedSlowBlock = true;
+                settings.speed = settings.speed - 2;
+                if (settings.mode == 'winter_drive' || settings.mode == 'trucks') {
+                    speedSum = settings.speed / 2;
+                }
+            } else if (isOfficerActive && item.classList.contains('officer_img') && item.dataset.img == 'img_5') {
+                // setTimeout(() => {
                 settings.start = false;
                 audio.pause();
-
                 document.querySelector('.modal-overlay.officer-stopped').classList.add('--show')
                 setTimeout(() => {
                     document.querySelector('.modal-overlay.officer-stopped').classList.remove('--show')
                     showQuestionModal();
-                }, 2000);
+                }, 4000);
+                // }, 1000);
             }
 
         }
-        if (!item.classList.contains('officer')) {
+        if (!item.classList.contains('officer_img') && !item.classList.contains('slow_before_officer')) {
             item.y += speedSum;
-        } else {
-            item.y += puddleSpeedSum;
-        }
-        item.style.top = item.y + 'px';
-        if (item.y >= document.documentElement.clientHeight) {
-            item.y = -8000 + document.documentElement.clientHeight;
-            if (!item.classList.contains('officer')) {
+            item.style.top = item.y + 'px';
+            if (item.y >= document.documentElement.clientHeight) {
+                item.y = -8000 + document.documentElement.clientHeight;
                 let carPos =  lineAvailablePositions[item.dataset.line][0];
                 item.style.left = gameArea.offsetWidth * carPos - (item.offsetWidth / 2) + 'px'
                 lineAvailablePositions[item.dataset.line] = [item.dataset.pos]
                 item.dataset.pos = carPos;
             }
         }
+
     });
 }
 
@@ -479,21 +493,29 @@ function movePuddle() {
 
 function showOfficer()
 {
+    isOfficerActive = true;
     // document.querySelector('.officer').style.left = '-24%'
     // document.querySelector('.officer').style.display = 'block'
-    document.querySelector('.officer').classList.remove("--hide");
+    // document.querySelector('.officer').classList.remove("--hide");
 }
 
 function hideOfficer()
 {
+    isOfficerActive = false;
+    crossedSlowBlock = false;
     // document.querySelector('.officer').style.left = '-600px';
     // document.querySelector('.officer').style.display = 'none'
-    document.querySelector('.officer').classList.add("--hide");
+    // document.querySelector('.officer').classList.add("--hide");
 }
 
 function startTimeoutOfficer()
 {
-    setTimeout(() => showOfficer(), 20000);
+    timeOutId = setTimeout(() => showOfficer(), 20000);
+}
+
+function clearOfficerTimeOut()
+{
+    clearTimeout(timeOutId);
 }
 
 leaderBtn.onclick = () => {
@@ -568,13 +590,24 @@ function showQuestionModal()
                             audio.play();
                             requestAnimationFrame(playGame);
                             startTimeoutOfficer();
-                        }, 2000);
+                            setTimeout(() => {
+                                // speedSum += speedSumInc;
+
+                                settings.speed = settings.speed + 2;
+                                if (settings.mode == 'winter_drive' || settings.mode == 'trucks') {
+                                    speedSum = settings.speed / 2;
+                                }
+                            }, 1500);
+                        }, 4000);
+
                     } else {
                         closeQuestionModal();
                         audio.currentTime = 0;
                         audio.autoplay = false;
                         settings.speed = 6
                         pointsValue.innerHTML = settings.score;
+                        clearOfficerTimeOut();
+                        hideOfficer();
                         speedSum = settings.mode == 'winter_drive' || settings.mode == 'trucks'  ? settings.speed / 2 : settings.speed
                         puddleSpeedSum = settings.speed;
 
@@ -596,7 +629,7 @@ function showQuestionModal()
                             againBtn.classList.add(settings.mode);
                             screenGame.classList.remove('screen-up')
                             score.classList.add('hide');
-                        }, 2000);
+                        }, 4000);
                     }
                 }
             });

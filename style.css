@@ -28,7 +28,7 @@ button {
 }
 
 .car,
-.enemy {
+.enemy:not(.officer_img,.slow_before_officer) {
     display: block;
     position: absolute;
     z-index: 5;
@@ -263,6 +263,16 @@ button {
     background-repeat: no-repeat;
     /*padding: 0 calc(100vw * 100 / 590);*/
     max-width: 590px;
+}
+
+.img_5:before {
+    content: "";
+    width: calc(108 / 590 * 100%);
+    height: calc(287 / 590 * 100%);
+    background: rgba(0, 0, 0, 0) url(image/officer2.svg) left/cover no-repeat;
+    position: absolute;
+    top: 30%;
+    left: 2%;
 }
 
 .line_block.winter_drive.img_1 {
@@ -871,7 +881,7 @@ button {
 
 @media screen and (max-width: 550px) {
     .car,
-    .enemy {
+    .enemy:not(.officer_img,.slow_before_officer) {
         width: 50px;
         height: 100px;
     }
