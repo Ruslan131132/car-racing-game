@@ -117,7 +117,7 @@ document.querySelector('.splide__button').addEventListener('click', () => {
         settings.mode = 'snow_cross'
         speedSum = settings.speed;
         speedSumInc = 1
-        enemyStyles = ['enemy1', 'enemy2'];
+        enemyStyles = ['enemy1', 'enemy2', 'enemy3'];
         cordiantHref.href = 'https://cordiant.ru/car/winter/snow_cross_2/'
         generateGame()
     } else if (mode == 'cars_drive') {
@@ -402,7 +402,7 @@ function moveEnemy() {
             carRect.left <= enemyRect.right &&
             carRect.bottom >= enemyRect.top
         ) {
-            if (!item.classList.contains('officer_img') && !item.classList.contains('slow_before_officer')) {
+            if (!item.classList.contains('officer_img') && !item.classList.contains('slow_before_officer') && !((settings.mode == 'snow_cross' || settings.mode == 'cars_drive') && item.classList.contains('enemy2'))) {
                 settings.start = false;
                 boomAudio.play()
                 audio.pause();

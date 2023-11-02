@@ -671,7 +671,7 @@ button {
 }
 
 .modal-header .management-button {
-    background-color: #36a898;
+    /*background-color: #36a898;*/
 }
 
 .modal-close {
@@ -811,8 +811,8 @@ button {
 
 .management-button {
     background: #55B2EF;
-    border-radius: 100px;
-    padding: 20px 40px;
+    /*border-radius: 100px;*/
+    /*padding: 20px 40px;*/
     font-style: normal;
     font-weight: 700;
     font-size: 20px;
@@ -822,11 +822,21 @@ button {
     color: #FFFFFF;
     text-decoration: none;
     height: fit-content;
+    background: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #04C0E8;
+    border-radius: 20px;
+    padding: 26px;
 }
 
 .management-button .management-subtext{
     color: #BBDCF1;
     font-size: 18px;
+}
+
+.media-container .management-button img {
+    border: 1px solid #04C0E8;
+    border-radius: 50%;
 }
 
 .trust-scroll__image {
