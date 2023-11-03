@@ -590,9 +590,18 @@ button {
 .media-container .management-button {
     display: flex;
     align-items: center;
-    padding: 18px 25px;
-    width: calc(100% - 50px);
-    justify-content: space-around;
+    padding: 18px;
+    width: calc(100% - 40px);
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+.media-container .management-button.cordiant-href {
+    justify-content: center;
+}
+
+.cordiant-href span {
+    text-align: left;
 }
 
 .modal-overlay {
@@ -813,9 +822,10 @@ button {
     background: #55B2EF;
     /*border-radius: 100px;*/
     /*padding: 20px 40px;*/
-    font-style: normal;
     font-weight: 700;
     font-size: 20px;
+    font-style: italic;
+    letter-spacing: 0.8px;
     line-height: 100%;
     text-align: center;
     text-transform: uppercase;
@@ -824,7 +834,7 @@ button {
     height: fit-content;
     background: none;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #04C0E8;
+    border: 1px solid #FFFFFF;
     border-radius: 20px;
     padding: 26px;
 }
@@ -832,11 +842,6 @@ button {
 .management-button .management-subtext{
     color: #BBDCF1;
     font-size: 18px;
-}
-
-.media-container .management-button img {
-    border: 1px solid #04C0E8;
-    border-radius: 50%;
 }
 
 .trust-scroll__image {
@@ -1051,8 +1056,11 @@ button {
     }
 
     .management-button {
-        font-size: 13px;
-        padding: 15px 20px;
+        font-size: 15px;
+    }
+
+    .management-button.cordiant-href {
+        font-size: 16px;
     }
 
     .management-button .management-subtext{
@@ -1090,7 +1098,7 @@ button {
     }
 
     .media-container .management-button {
-        padding: 15px 20px;
+        padding: 18px;
     }
 
     .media-container img.icon {
