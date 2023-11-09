@@ -539,7 +539,7 @@ leaderBtn.onclick = () => {
                 return `<div class="user-item">
                 <div class="user-info">
                     <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/icons/user.jpg'}">
-                    <span class="user-mode">${item.mode}</span>
+                    <span class="user-mode">${item.mode.replaceAll('_', ' ')}</span>
                 </div>
                 <span class="user-name">${item.tg ? item.tg : item.name}</span>
                 <span class="user-points">${item.count}</span>
@@ -654,10 +654,27 @@ function savePoints(data) {
 
     if (user_id == null) return;
 
+    let formatted_mode = data.mode;
+
+    switch(formatted_mode) {
+        case 'winter_drive':
+            formatted_mode = 'winter_drive_2'
+            break;
+        case 'cars_drive':
+            formatted_mode = 'business_ca_2'
+            break;
+        case 'snow_cross':
+            formatted_mode = 'snow_cross_2'
+            break;
+        case 'trucks':
+            formatted_mode = 'professional_dr_1'
+            break;
+    }
+
     let formData = JSON.stringify({
         user_id: user_id,
         count: data.score,
-        mode: data.mode
+        mode: formatted_mode
     });
 
     let xhr = new XMLHttpRequest();
