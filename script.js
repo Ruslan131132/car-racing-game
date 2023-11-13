@@ -555,6 +555,12 @@ function showQuestionModal()
     document.querySelector('.modal-overlay.question').classList.add('--show')
     let modalBody = document.querySelector('.modal-overlay.question .options');
     let modalTitle = document.querySelector('.modal-overlay.question .modal-title');
+    enemies.forEach(function (item) {
+        if (!item.classList.contains('line_block')){
+            item.y += -1200;
+            item.style.top = item.y + 'px';
+        }
+    })
     modalBody.innerHTML = ''
     modalTitle.innerHTML = ''
     let xhr = new XMLHttpRequest();
