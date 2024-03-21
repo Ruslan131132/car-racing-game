@@ -523,7 +523,7 @@ leaderBtn.onclick = () => {
     let modalBody = document.querySelector('.modal-body');
     modalBody.innerHTML = ''
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://cordiant.4k-pr.com/api/cordiant/getTopUsers', true);
+    xhr.open('GET', 'https://races-bot-api.solvintech.ru/api/cordiant/getTopUsers', true);
 
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -538,7 +538,7 @@ leaderBtn.onclick = () => {
             modalBody.innerHTML = response.data.map(item => {
                 return `<div class="user-item">
                 <div class="user-info">
-                    <img class="user-img" src="${item.avatar ? 'http://cordiant.4k-pr.com/storage/' + item.avatar : 'image/icons/user.jpg'}">
+                    <img class="user-img" src="${item.avatar ? 'https://races-bot-api.solvintech.ru/storage/' + item.avatar : 'image/icons/user.jpg'}">
                     <span class="user-mode">${item.mode.replaceAll('_', ' ')}</span>
                 </div>
                 <span class="user-name">${item.tg ? item.tg : item.name}</span>
@@ -564,7 +564,7 @@ function showQuestionModal()
     modalBody.innerHTML = ''
     modalTitle.innerHTML = ''
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://cordiant.4k-pr.com/api/cordiant/question/random', true);
+    xhr.open('GET', 'https://races-bot-api.solvintech.ru/api/cordiant/question/random', true);
 
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
@@ -684,7 +684,7 @@ function savePoints(data) {
     });
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://cordiant.4k-pr.com/api/cordiant/addPoints', true);
+    xhr.open('POST', 'https://races-bot-api.solvintech.ru/api/cordiant/addPoints', true);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
     xhr.send(formData);
